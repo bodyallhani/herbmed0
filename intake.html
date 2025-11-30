@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>초진 문진표 (비대면 사전 작성용)</title>
+  <title>바디올 청정한약 문진표</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
@@ -73,10 +73,10 @@
   </style>
 </head>
 <body>
-  <h1>초진 문진표 (비대면 사전 작성용)</h1>
+  <h1>바디올 청정한약 문진표</h1>
   <p class="hint">
     가능한 범위에서 편하게 작성해 주세요. 잘 모르겠는 항목은 비워두셔도 됩니다.<br>
-    작성이 끝나면 맨 아래의 <strong>“복붙용 문진 텍스트 생성”</strong> 버튼을 눌러 주세요.
+    작성이 끝나면 맨 아래의 <strong>“문진 텍스트 생성”</strong> 버튼을 눌러 주세요.
   </p>
 
   <form id="intakeForm">
@@ -277,14 +277,16 @@
       </label>
     </fieldset>
 
-    <button type="button" class="primary" onclick="generateText()">복붙용 문진 텍스트 생성</button>
+    <button type="button" class="primary" onclick="generateText()">문진 텍스트 생성</button>
     <button type="reset">입력 초기화</button>
   </form>
 
-  <h2>복붙용 문진 텍스트</h2>
+  <h2>문진 텍스트</h2>
   <p class="hint">
     아래 내용을 전체 선택(Ctrl+A 또는 길게 누르기 → 전체선택) 후 복사하여<br>
-    한의원으로 보내시면 됩니다.
+    바디올한의원 카카오 채널
+    (<a href="https://pf.kakao.com/_wdtXK/chat" target="_blank">https://pf.kakao.com/_wdtXK/chat</a>)
+    1:1 채팅으로 보내주세요.
   </p>
   <textarea id="output" readonly></textarea>
   <button type="button" onclick="copyOutput()">텍스트 복사하기</button>
@@ -377,7 +379,7 @@
       out.select();
       out.setSelectionRange(0, 99999); // 모바일 대응
       document.execCommand("copy");
-      alert("복사되었습니다. 한의원에 붙여넣어 보내시면 됩니다.");
+      alert("복사되었습니다. 바디올한의원 카카오 채널 채팅창에 붙여넣어 보내주세요.");
     }
   </script>
 </body>
