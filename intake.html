@@ -70,6 +70,24 @@
       color: #fff;
       border-color: #1a73e8;
     }
+    .consent-box {
+      font-size: 0.85rem;
+      background: #eef3ff;
+      padding: 8px;
+      border-radius: 6px;
+      margin-top: 4px;
+    }
+    .consent-checkbox-wrapper {
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+    }
+    .consent-checkbox-wrapper input[type="checkbox"] {
+      width: auto;
+      margin-top: 0;
+    }
   </style>
 </head>
 <body>
@@ -278,6 +296,26 @@
       </label>
     </fieldset>
 
+    <!-- 개인정보 수집·이용 동의 -->
+    <fieldset>
+      <legend>개인정보 수집·이용 동의 (필수)</legend>
+      <div class="consent-box">
+        <p>
+          바디올한의원은 아래 목적을 위해 문진표에 기재된 내용을 수집·이용합니다.
+        </p>
+        <ul>
+          <li>① 목적: 진료 상담 및 진료 여부 판단, 추후 치료 계획 수립</li>
+          <li>② 수집 항목: 상기 문진표에 작성한 내용 일체</li>
+          <li>③ 보유·이용 기간: 상담 종료 후 최대 5년 (관련 법령에 따른 기간 내)</li>
+          <li>④ 동의 거부권: 동의를 거부하실 수 있으나, 이 경우 상담 및 진료 안내가 제한될 수 있습니다.</li>
+        </ul>
+      </div>
+      <div class="consent-checkbox-wrapper">
+        <input type="checkbox" id="privacyConsent" />
+        <label for="privacyConsent"><strong>위 개인정보 수집·이용에 동의합니다.</strong></label>
+      </div>
+    </fieldset>
+
     <button type="button" class="primary" onclick="generateText()">문진 텍스트 생성</button>
     <button type="reset">입력 초기화</button>
   </form>
@@ -293,13 +331,74 @@
   <button type="button" onclick="copyOutput()">텍스트 복사하기</button>
 
   <script>
+    // Google Apps Script Web App URL (선생님이 보내주신 주소)
+    const FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbw9gPpp33Flc-QAsd7PdPDjeOGGKkjJqcivUL3wYvpp2qVxBQj-crVRKsx84OuPuEXL/exec";
+
     function v(id) {
       return (document.getElementById(id).value || "").trim();
     }
 
-    function generateText() {
-      const l = [];
+    function formatKoreanDateTime(date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, "0");
+      const d = String(date.getDate()).padStart(2, "0");
+      const hh = String(date.getHours()).padStart(2, "0");
+      const mm = String(date.getMinutes()).padStart(2, "0");
+      const ss = String(date.getSeconds()).padStart(2, "0");
+      return y + "." + m + "." + d + " " + hh + ":" + mm + ":" + ss;
+    }
 
+    function collectFormData(consentTime) {
+      const ids = [
+        "name","age","gender","job","workType","sleepHours","caffeine","alcohol","exercise",
+        "mainSymptom1","mainSymptom2","mainSymptom3","onset",
+        "worseTime","triggers","relievers","pattern",
+        "fatigue","dizziness","palpitation","anxiety","orthostatic","numbness",
+        "sleepOnset","sleepMiddle","sleepQuality","sleepMorning",
+        "appetite","bloating","postMeal","nausea","stool",
+        "extremitiesTemp","sweating","tempSensitivity","breathing","sensitivity",
+        "gyne","gyne2",
+        "pain","morningStiffness","reinjury","manualTxHistory","exercisePain",
+        "diagnosis","meds","surgery","familyHistory","etc"
+      ];
+
+      const data = {};
+      ids.forEach(id => {
+        data[id] = v(id);
+      });
+
+      data.consentTime = consentTime;
+      return data;
+    }
+
+    function sendToServer(data) {
+      const formBody = new URLSearchParams(data).toString();
+
+      fetch(FORM_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: formBody
+      }).catch(err => {
+        console.error("문진 저장 에러:", err);
+      });
+    }
+
+    function generateText() {
+      const consentCheckbox = document.getElementById("privacyConsent");
+      if (!consentCheckbox.checked) {
+        alert("개인정보 수집·이용에 동의해 주셔야 문진 텍스트를 생성할 수 있습니다.");
+        return;
+      }
+
+      const l = [];
+      const now = new Date();
+      const consentTime = formatKoreanDateTime(now);
+
+      // 상단에 동의 시각 표기
+      l.push("[개인정보 수집·이용 동의: 동의함 / " + consentTime + "]");
+      l.push("");
       l.push("[기본정보]");
       l.push("- 이름/이니셜: " + v("name"));
       l.push("- 나이: " + v("age"));
@@ -372,13 +471,17 @@
       l.push("- 기타 하고 싶은 말: " + v("etc"));
 
       document.getElementById("output").value = l.join("\n");
+
+      // 서버(스프레드시트)로 데이터 전송
+      const data = collectFormData(consentTime);
+      sendToServer(data);
     }
 
     function copyOutput() {
       const out = document.getElementById("output");
       out.focus();
       out.select();
-      out.setSelectionRange(0, 99999); // 모바일 대응
+      out.setSelectionRange(0, 99999);
       document.execCommand("copy");
       alert("복사되었습니다. 바디올한의원 카카오 채널 채팅창에 붙여넣어 보내주세요.");
     }
