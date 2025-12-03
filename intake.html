@@ -75,20 +75,21 @@
 <body>
   <h1>바디올 청정한약 문진표</h1>
   <p class="hint">
-    가능한 범위에서 편하게 작성해 주세요. 잘 모르겠는 항목은 비워두셔도 됩니다.<br>
+    <strong>자세히 쓸수록</strong> 진단이 명확해지고 치료가 수월해집니다.<br>
+    잘 모르시는 항목은, 추정형으로 쓰시거나 비워두셔도 됩니다.<br>
     작성이 끝나면 맨 아래의 <strong>“문진 텍스트 생성”</strong> 버튼을 눌러 주세요.
   </p>
 
   <form id="intakeForm">
     <fieldset>
       <legend>기본정보</legend>
-      <label>이름 (또는 이니셜, 선택):
+      <label><strong>이름:</strong>
         <input type="text" id="name" />
       </label>
-      <label>나이:
+      <label><strong>나이:</strong>
         <input type="number" id="age" min="1" max="120" />
       </label>
-      <label>성별:
+      <label><strong>성별:</strong>
         <select id="gender">
           <option value="">선택</option>
           <option value="남성">남성</option>
@@ -117,7 +118,7 @@
     </fieldset>
 
     <fieldset>
-      <legend>주증상</legend>
+      <legend><strong>주증상</strong></legend>
       <label>가장 불편한 증상 1:
         <input type="text" id="mainSymptom1" placeholder="예: 어지럼, 두근거림, 수면장애 등" />
       </label>
@@ -133,7 +134,7 @@
     </fieldset>
 
     <fieldset>
-      <legend>증상 양상</legend>
+      <legend><strong>증상양상</strong></legend>
       <label>하루 중 어느 시간대에 가장 심한가요?
         <input type="text" id="worseTime" placeholder="예: 아침 기상 직후 / 오후 3~5시 / 밤 / 일정치 않음 등" />
       </label>
