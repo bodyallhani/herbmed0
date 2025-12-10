@@ -146,6 +146,20 @@
       color: #555;
       margin: 12px 0 4px;
     }
+    /* 새 객관식 문항 라디오 그룹 */
+    .radio-group {
+      margin-top: 4px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.9rem;
+    }
+    .radio-group label {
+      margin-top: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
   </style>
 </head>
 <body>
@@ -189,6 +203,24 @@
     <form id="intakeForm">
       <fieldset>
         <legend>기본정보</legend>
+
+        <!-- A. 새 문항: 바디올 내원 여부 (맨 처음 문항) -->
+        <label><strong>바디올한의원에 현재 계시거나, 내원하신 적이 있으신가요?</strong></label>
+        <div class="radio-group">
+          <label>
+            <input type="radio" name="visitStatus" value="O" />
+            네
+          </label>
+          <label>
+            <input type="radio" name="visitStatus" value="X" />
+            아니오
+          </label>
+          <label>
+            <input type="radio" name="visitStatus" value="?" />
+            잘 모름
+          </label>
+        </div>
+
         <label><strong>이름:</strong>
           <input type="text" id="name" placeholder="'익명' 가능. / 단, 실제 치료시에는 '실명'필요." />
         </label>
@@ -428,6 +460,15 @@
       return (document.getElementById(id).value || "").trim();
     }
 
+    // 새 객관식 문항 값(O/X/?) 가져오기
+    function getVisitStatus() {
+      const radios = document.querySelectorAll('input[name="visitStatus"]');
+      for (const r of radios) {
+        if (r.checked) return r.value; // O / X / ?
+      }
+      return "";
+    }
+
     function formatKoreanDateTime(date) {
       const y = date.getFullYear();
       const m = String(date.getMonth() + 1).padStart(2, "0");
@@ -457,6 +498,10 @@
         data[id] = v(id);
       });
 
+      // 새 문항: 바디올 내원 여부 (O/X/?)
+      data.visitStatus = getVisitStatus();
+
+      // 개인정보 동의 시각
       data.consentTime = consentTime;
       return data;
     }
@@ -485,10 +530,17 @@
       const l = [];
       const now = new Date();
       const consentTime = formatKoreanDateTime(now);
+      const visitStatus = getVisitStatus(); // O / X / ? or ""
 
       // 상단에 동의 시각 표기
       l.push("[개인정보 수집·이용 동의: 동의함 / " + consentTime + "]");
       l.push("");
+
+      // C. 새 요약 블록: [개인정보 동의]와 [기본정보] 사이
+      l.push("[바디올한의원 내원 여부]");
+      l.push("- 내원 여부: " + (visitStatus || ""));
+      l.push("");
+
       l.push("[기본정보]");
       l.push("- 이름/이니셜: " + v("name"));
       l.push("- 나이: " + v("age"));
