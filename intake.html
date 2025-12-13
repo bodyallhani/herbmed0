@@ -160,6 +160,22 @@
       align-items: center;
       gap: 4px;
     }
+
+    /* 추가: 인트로 이미지 */
+    .intro-image-wrap {
+      margin-top: 10px;
+      margin-bottom: 6px;
+    }
+    .intro-image-wrap img {
+      width: 100%;
+      max-width: 760px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      border-radius: 10px;
+      border: 1px solid #e0e3ec;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
   </style>
 </head>
 <body>
@@ -169,7 +185,7 @@
   <div id="intro" class="card">
     <div class="badge">1분 문진 · 대표원장 직접 분석</div>
     <p class="intro-title">
-      “ 건강관리 • 질병진단 "<br> 
+      “ 건강관리 • 질병진단 "<br>
       " 한의학적으로 한번은 제대로 분석해보세요. ”
     </p>
     <p class="hint">
@@ -178,11 +194,25 @@
       ✔ 답변은 <strong>대표원장이 직접</strong> 읽고, 분석합니다.<br>
       <br>
     </p>
+
+    <!-- 1) 이미지 삽입 (설명부분 다음에) -->
+    <div class="intro-image-wrap">
+      <img
+        src="https://raw.githubusercontent.com/bodyallhani/herbmed0/main/jinmak.png"
+        alt="진맥 이미지"
+        loading="lazy"
+      />
+    </div>
+
     <ul class="intro-list">
       <li>소화,수면,자율신경,피부,통증패턴까지 <strong>한번에 확인</strong><br>할 수 있습니다.</li>
       <li>해당 페이지는 <strong>진단 효율을 위해 제작된 요약 프로그램</strong>으로, 자동 분석기능은 없습니다.</li>
       <li><strong>한의사가 직접 해석</strong>해야하는 문진표입니다.</li>
-      <li>따라서 설문완료 후, 맨 아래에서 생성되는 텍스트를, *한의원 카카오채널*로 보내주셔야 분석이 진행 가능해집니다.</li>
+      <!-- 2) 설명부분 수정 (3번 올인원 반영) -->
+      <li>
+        설문 완료 후, 아래의 <strong>“최종응답 및 다음단계”</strong> 버튼을 누르면<br>
+        <strong>문진요약이 자동으로 정리·저장(구글시트 전송)·복사</strong>되고, 안내 후 <strong>카카오채널 채팅창으로 바로 연결</strong>됩니다.
+      </li>
     </ul>
     <button type="button" class="start-btn" onclick="startSurvey()">
       정밀 문진 시작하기
@@ -197,7 +227,7 @@
     <p class="hint">
       <strong>자세히 쓸수록</strong> 진단이 명확해지고 치료가 수월해집니다.<br>
       잘 모르시는 항목은, 추정형으로 쓰시거나 비워두셔도 됩니다.<br>
-      작성이 끝나면 맨 아래의 <strong>“문진 텍스트 생성”</strong> 버튼을 눌러 주세요.<br>
+      작성이 끝나면 맨 아래의 <strong>“최종응답 및 다음단계”</strong> 버튼을 눌러 주세요.<br>
     </p>
 
     <form id="intakeForm">
@@ -436,18 +466,18 @@
         </div>
       </fieldset>
 
-      <button type="button" class="primary" onclick="generateText()">문진 텍스트 생성</button>
+      <!-- 3) 올인원 버튼으로 변경 -->
+      <button type="button" class="primary" onclick="allInOne()">최종응답 및 다음단계</button>
       <button type="reset">입력 초기화</button>
     </form>
   </div>
 
   <h2>문진 텍스트</h2>
   <p class="hint">
-    아래 내용을 전체 선택(Ctrl+A 또는 길게 누르기 → 전체선택) 후 복사하여<br>
-    바디올한의원 카카오 채널
+    아래 내용은 자동으로 복사됩니다.<br>
+    안내 팝업 확인 후, 카카오 채널 채팅창이 열리면 바로 붙여넣기(Ctrl+V 또는 길게 누르기) 하신 뒤 보내주세요.<br>
+    바디올한의원 카카오 채널:
     (<a href="https://pf.kakao.com/_wdtXK/chat" target="_blank">https://pf.kakao.com/_wdtXK/chat</a>)
-    1:1 채팅으로 보내주세요.<br>
-    저희에게 카톡으로 보내주셔야, 대표원장님께서 정밀진단을 해주실 수 있습니다.
   </p>
   <textarea id="output" readonly></textarea>
   <button type="button" onclick="copyOutput()">텍스트 복사하기</button>
@@ -455,6 +485,7 @@
   <script>
     // Google Apps Script Web App URL
     const FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbw9gPpp33Flc-QAsd7PdPDjeOGGKkjJqcivUL3wYvpp2qVxBQj-crVRKsx84OuPuEXL/exec";
+    const KAKAO_URL = "https://pf.kakao.com/_wdtXK/chat";
 
     function v(id) {
       return (document.getElementById(id).value || "").trim();
@@ -520,16 +551,8 @@
       });
     }
 
-    function generateText() {
-      const consentCheckbox = document.getElementById("privacyConsent");
-      if (!consentCheckbox.checked) {
-        alert("개인정보 수집·이용에 동의해 주셔야 문진 텍스트를 생성할 수 있습니다.");
-        return;
-      }
-
+    function buildSummaryText(consentTime) {
       const l = [];
-      const now = new Date();
-      const consentTime = formatKoreanDateTime(now);
       const visitStatus = getVisitStatus(); // O / X / ? or ""
 
       // 상단에 동의 시각 표기
@@ -612,20 +635,88 @@
       l.push("[기타]");
       l.push("- 기타 하고 싶은 말: " + v("etc"));
 
-      document.getElementById("output").value = l.join("\n");
+      return l.join("\n");
+    }
+
+    function copyText(text) {
+      // 임시 textarea로 복사 (모바일/카톡 인앱 포함 안정성)
+      const temp = document.createElement("textarea");
+      temp.style.position = "fixed";
+      temp.style.opacity = "0";
+      temp.value = text;
+      document.body.appendChild(temp);
+      temp.focus();
+      temp.select();
+      try {
+        document.execCommand("copy");
+      } catch (err) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).catch(function(e){
+            console.warn("clipboard.writeText 실패:", e);
+          });
+        }
+      }
+      document.body.removeChild(temp);
+    }
+
+    // 기존 버튼(문진 텍스트 생성) 기능 유지용: 필요 시 수동 생성 가능
+    function generateText() {
+      const consentCheckbox = document.getElementById("privacyConsent");
+      if (!consentCheckbox.checked) {
+        alert("개인정보 수집·이용에 동의해 주셔야 문진 텍스트를 생성할 수 있습니다.");
+        return;
+      }
+
+      const now = new Date();
+      const consentTime = formatKoreanDateTime(now);
+
+      const summaryText = buildSummaryText(consentTime);
+      document.getElementById("output").value = summaryText;
 
       // 서버(스프레드시트)로 데이터 전송
       const data = collectFormData(consentTime);
       sendToServer(data);
     }
 
+    // 3) 올인원 기능: 요약 생성 + 구글시트 전송 + 자동복사 + 팝업 + 카톡 이동
+    function allInOne() {
+      const consentCheckbox = document.getElementById("privacyConsent");
+      if (!consentCheckbox.checked) {
+        alert("개인정보 수집·이용에 동의해 주셔야 합니다.");
+        return;
+      }
+
+      const now = new Date();
+      const consentTime = formatKoreanDateTime(now);
+
+      // 요약 생성
+      const summaryText = buildSummaryText(consentTime);
+      document.getElementById("output").value = summaryText;
+
+      // 구글시트 전송
+      const data = collectFormData(consentTime);
+      sendToServer(data);
+
+      // 자동 복사
+      copyText(summaryText);
+
+      // 안내 팝업 후 즉시 카톡 이동
+      alert(
+        "문진요약이 복사되었습니다.\n\n카카오톡 채팅창이 열리면, 바로 붙여넣기(Ctrl+V 또는 길게 누르기) 하신 뒤 보내주시면 됩니다."
+      );
+
+      window.location.href = KAKAO_URL;
+    }
+
     function copyOutput() {
       const out = document.getElementById("output");
-      out.focus();
-      out.select();
-      out.setSelectionRange(0, 99999);
-      document.execCommand("copy");
-      alert("복사되었습니다. 바디올한의원 카카오 채널 채팅창에 붙여넣어 보내주시면, 대표원장이 직접 진단해드리겠습니다.");
+      const text = out.value || "";
+      if (!text) {
+        alert("복사할 문진 텍스트가 없습니다. 먼저 ‘최종응답 및 다음단계’를 눌러주세요.");
+        return;
+      }
+      copyText(text);
+      alert("복사되었습니다. 카카오 채널 채팅창에 붙여넣어 보내주시면, 대표원장이 직접 진단해드리겠습니다.");
     }
 
     // 추가: 인트로 → 폼 전환
