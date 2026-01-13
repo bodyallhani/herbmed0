@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BNI 신경-기능 지수 검사 (무료/익명)</title>
+  <style>
+    :root { --bg:#f1f3f4; --card:#fff; --text:#111; --muted:#555; --line:#e6e7f0; --accent:#111; }
+    *{box-sizing:border-box}
+    body{margin:0;padding:16px;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",sans-serif}
+    .card{max-width:720px;margin:0 auto;background:var(--card);border-radius:12px;box-shadow:0 1px 3px rgba(60,64,67,.25);padding:18px 16px}
+    h1{font-size:1.2rem;margin:0 0 6px}
+    .sub{font-size:.95rem;color:var(--muted);margin:0 0 14px;line-height:1.4}
+    .pill{display:inline-block;padding:6px 10px;border:1px solid var(--line);border-radius:999px;font-size:.85rem;color:var(--muted);margin:0 8px 10px 0;background:#fafafa}
+    .section{margin-top:14px;border-top:1px solid var(--line);padding-top:14px}
+    .secTitle{font-weight:700;margin:0 0 8px;font-size:1rem}
+    .q{padding:10px 10px;border:1px solid var(--line);border-radius:10px;margin:10px 0;background:#fff}
+    .q p{margin:0 0 8px;line-height:1.4}
+    .scale{display:flex;gap:8px;flex-wrap:wrap}
+    .opt{display:flex;align-items:center;gap:6px;border:1px solid var(--line);padding:8px 10px;border-radius:999px;cursor:pointer}
+    .opt input{accent-color:#111}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    button{width:100%;padding:12px 14px;border:0;border-radius:12px;background:#111;color:#fff;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+    button:disabled{opacity:.55;cursor:not-allowed}
+    .note{font-size:.9rem;color:var(--muted);margin-top:10px;line-height:1.45}
+    .result{display:none;margin-top:16px;border-top:1px solid var(--line);padding-top:14px}
+    .kpi{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
+    .box{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fafafa}
+    .box .label{color:var(--muted);font-size:.85rem;margin-bottom:6px}
+    .box .val{font-size:1.1rem;font-weight:800}
+    .bar{height:10px;border-radius:999px;background:#e9eaee;overflow:hidden;margin-top:8px}
+    .bar > div{height:100%;background:#111;width:0%}
+    .ctaRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .ctaRow a{flex:1;min-width:220px;text-align:center;text-decoration:none;padding:12px 14px;border-radius:12px;font-weight:800}
+    .ctaMain{background:#111;color:#fff}
+    .ctaSub{background:#fff;color:#111;border:1px solid var(--line)}
+    .tiny{font-size:.82rem;color:var(--muted);margin-top:6px}
+    .err{color:#b00020;font-weight:700;margin-top:8px;display:none}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>BNI 신경-기능 지수 검사</h1>
+    <p class="sub">
+      이 검사는 ‘통증’ 자체가 아니라, 통증/소화/수면을 흔드는 <b>신경 기능 흐름</b>을 점수화합니다.<br/>
+      <b>무료 · 익명</b> (이름/연락처 없음) · 2분 · 즉시 결과
+    </p>
+    <div class="row">
+      <span class="pill">총점 0~100</span>
+      <span class="pill">서브스코어 4개</span>
+      <span class="pill">타입 Top2</span>
+      <span class="pill">결과코드 발급</span>
+    </div>
+
+    <form id="bniForm">
+      <!-- A -->
+      <div class="section">
+        <p class="secTitle">A. 압박/정렬 (자세·반복 삐끗 패턴)</p>
+
+        <div class="q" data-qid="A1">
+          <p>A1. 같은 부위(목/허리/등)가 반복해서 삐끗하거나 담이 옵니다.</p>
+          <div class="scale"></div>
+        </div>
+
+        <div class="q" data-qid="A2">
+          <p>A2. 자세(고개 숙임/오래 앉기/서 있기)에 따라 통증이 확 달라집니다.</p>
+          <div class="scale"></div>
+        </div>
+
+        <div class="q" data-qid="A3">
+          <p>A3. MRI/엑스레이는 큰 문제가 없는데 통증은 계속 반복됩니다.</p>
+          <div class="scale"></div>
+        </div>
+
+        <div class="q" data-qid="A4">
+          <p>A4. 한 번 아프기 시작하면 회복까지 오래 걸리고 잔통증이 남습니다.</p>
+          <div class="scale"></div>
+        </div>
+      </div>
+
+      <!-- B -->
+      <div class="section">
+        <p class="secTitle">B. 자율신경 불균형 (불안·수면·컨디션 흔들림)</p>
+
+        <div class="q" data-qid="B1">
+          <p>B1. 통증이 심해질 때 불안/두근거림/식은땀이 같이 옵니다.</p>
+          <div class="scale"></div>
+        </div>
+
+        <div class="q" data-qid="B2">
+          <p>B2. 스트레스나 긴장 후에 증상이 확 악화됩니다.</p>
+          <div class="scale"></div>
+        </div>
+
+        <div class="q" data-qid="B3">
+          <p>B3. 잠이 얕거나 자주 깨거나, 개운하지 않습니다.</p>
+          <div class="scale"></div>
+        </div>
+
+        <div class="q" data-qid="B4">
+          <p>B4. 증상이 들쭉날쭉하고 ‘컨디션’에 따라 크게 흔들립니다.</p>
+          <div class="scale"></div>
+        </div>
+      </div>
+
+      <!-- C -->
+      <div class="section">
+        <p class="secTitle">C. 내장-연동 (소화·배변이 통증 리듬을 건드림)</p>
+
+        <div class="q" data-qid="C1">
+          <p>C1. 소화불량/더부룩함/트림/속쓰림 중 하나 이상이 만성입니다.</p>
+          <div class="scale"></div>
+        </div>
+
+        <div class="q" data-qid="C2">
+          <p>C2. 배변(변비/설사/잔변감)이 불규칙하거나 패턴이 깨져 있습니다.</p>
+          <div class="scale"></div>
+        </div>
+
+        <div class="q" data-qid="C3">
+          <p>C3. 목·등·가슴 답답함과 소화불편이 같이 엮여서 옵니다.</p>
+          <div class="scale"></div>
+        </div>
+
+        <div class="q" data-qid="C4">
+          <p>C4. 음식을 먹고 난 뒤 통증/피로/두통이 더 심해지는 느낌이 있습니다.</p>
+          <div class="scale"></div>
+        </div>
+      </div>
+
+      <!-- D -->
+      <div class="section">
+        <p class="secTitle">D. 회복력 저하 (회복·유지력 문제)</p>
+
+        <div class="q" data-qid="D1">
+          <p>D1. 아침부터 이미 피곤하거나 무기력한 날이 많습니다.</p>
+          <div class="scale"></div>
+        </div>
+
+        <div class="q" data-qid="D2">
+          <p>D2. 휴식을 해도 피로가 잘 회복되지 않습니다.</p>
+          <div class="scale"></div>
+        </div>
+
+        <div class="q" data-qid="D3">
+          <p>D3. 운동/활동을 하면 좋아지기보다 더 망가지는 느낌이 있습니다.</p>
+          <div class="scale"></div>
+        </div>
+
+        <div class="q" data-qid="D4">
+          <p>D4. 몸이 예민해져 작은 자극(소리/온도/감정)에도 쉽게 무너집니다.</p>
+          <div class="scale"></div>
+        </div>
+      </div>
+
+      <div class="note">
+        <b>응답 척도</b>: 전혀 아니다(0) · 아니다(1) · 보통(2) · 그렇다(3) · 매우 그렇다(4)<br/>
+        결과는 의료적 ‘진단’이 아니라 <b>신경 기능 흐름 위험도</b>를 점수화한 것입니다.
+      </div>
+
+      <div id="err" class="err">모든 문항에 응답해 주세요.</div>
+
+      <button id="submitBtn" type="submit">내 신경-기능 지수(BNI) 확인하기</button>
+      <div class="tiny">개인정보(이름/연락처) 입력 없음 · 익명 저장(점수/코드/유입정보)</div>
+    </form>
+
+    <div id="result" class="result">
+      <h2 style="margin:0 0 8px;font-size:1.05rem;">BNI 결과</h2>
+
+      <div class="kpi">
+        <div class="box">
+          <div class="label">BNI 총점</div>
+          <div class="val" id="totalText">-</div>
+          <div class="bar"><div id="totalBar"></div></div>
+        </div>
+        <div class="box">
+          <div class="label">등급</div>
+          <div class="val" id="gradeText">-</div>
+          <div class="tiny" id="gradeLine"></div>
+        </div>
+        <div class="box">
+          <div class="label">핵심 패턴(Top2)</div>
+          <div class="val" id="typeText">-</div>
+          <div class="tiny" id="typeLine"></div>
+        </div>
+        <div class="box">
+          <div class="label">결과코드</div>
+          <div class="val" id="codeText">-</div>
+          <div class="tiny">2차 정밀진단에서 이 코드로 자동 분기됩니다.</div>
+        </div>
+      </div>
+
+      <div class="kpi">
+        <div class="box"><div class="label">A 압박/정렬</div><div class="val" id="subA">-</div></div>
+        <div class="box"><div class="label">B 자율신경</div><div class="val" id="subB">-</div></div>
+        <div class="box"><div class="label">C 내장-연동</div><div class="val" id="subC">-</div></div>
+        <div class="box"><div class="label">D 회복력</div><div class="val" id="subD">-</div></div>
+      </div>
+
+      <div class="note" id="oneLine" style="font-weight:800;color:#111;"></div>
+
+      <!-- 다음 단계(원장님 쪽 링크로 교체) -->
+      <div class="ctaRow">
+        <!-- 2차 intake로 넘길 때: code/score/type을 쿼리로 전달 -->
+        <a id="ctaMain" class="ctaMain" href="#">정밀 분석 리포트 받기(무료)</a>
+        <a class="ctaSub" href="#" onclick="copyCode();return false;">결과코드 복사</a>
+      </div>
+      <div class="tiny">※ 정밀 리포트는 2차 문진(체크형) 완료 후 제공됩니다.</div>
+    </div>
+  </div>
+
+<script>
+  // =========================
+  // 0) 설정값: 반드시 교체
+  // =========================
+  const APPS_SCRIPT_WEBAPP_URL = "PUT_YOUR_WEBAPP_URL_HERE"; // 예: https://script.google.com/macros/s/XXXX/exec
+  const INTAKE_URL = "https://bodyallhani.github.io/herbmed0/intake.html"; // 2차 정밀문진 페이지(원장님 기존 것)
+
+  // =========================
+  // 1) 문항 렌더링
+  // =========================
+  const scaleLabels = [
+    ["0","전혀 아니다"],
+    ["1","아니다"],
+    ["2","보통"],
+    ["3","그렇다"],
+    ["4","매우 그렇다"]
+  ];
+
+  function renderScales() {
+    document.querySelectorAll(".q").forEach((qDiv) => {
+      const qid = qDiv.getAttribute("data-qid");
+      const scale = qDiv.querySelector(".scale");
+      scale.innerHTML = "";
+      scaleLabels.forEach(([val, txt]) => {
+        const id = `${qid}_${val}`;
+        const label = document.createElement("label");
+        label.className = "opt";
+        label.setAttribute("for", id);
+        label.innerHTML = `
+          <input type="radio" name="${qid}" id="${id}" value="${val}" />
+          <span>${txt}</span>
+        `;
+        scale.appendChild(label);
+      });
+    });
+  }
+  renderScales();
+
+  // =========================
+  // 2) 점수/타입/등급
+  // =========================
+  const typeName = {
+    "A":"압박/정렬형",
+    "B":"자율신경형",
+    "C":"내장연동형",
+    "D":"회복저하형"
+  };
+
+  // 동점 우선순위: B > C > D > A
+  const tiePriority = {"B":4,"C":3,"D":2,"A":1};
+
+  function sumSection(prefix) {
+    let s = 0;
+    for (let i=1;i<=4;i++){
+      const v = getAnswer(`${prefix}${i}`);
+      if (v === null) return null;
+      s += v;
+    }
+    return s; // 0~16
+  }
+
+  function getAnswer(qid){
+    const el = document.querySelector(`input[name="${qid}"]:checked`);
+    return el ? parseInt(el.value,10) : null;
+  }
+
+  function scaleTo25(sectionSum0to16){
+    return Math.round((sectionSum0to16 / 16) * 25); // 0~25
+  }
+
+  function gradeFrom(total){
+    if (total <= 24) return {grade:"양호군", line:"현재는 큰 위험 신호가 적은 편입니다. 반복 패턴은 초기 관리가 핵심입니다."};
+    if (total <= 49) return {grade:"관심군", line:"신경 기능이 흔들리기 시작한 단계입니다. 생활/자세 교정만으로도 변화 여지가 있습니다."};
+    if (total <= 69) return {grade:"주의군", line:"증상이 ‘컨디션’과 같이 움직이는 단계입니다. 신경 흐름 평가가 필요한 패턴일 수 있습니다."};
+    return {grade:"고위험군", line:"반복 통증/소화/수면 문제가 ‘한 축’으로 엮였을 가능성이 높습니다. 정밀 분석이 필요한 패턴입니다."};
+  }
+
+  function pickTop2(subScores){ // subScores: {A:0-25,...}
+    const arr = Object.keys(subScores).map(k => ({k, v: subScores[k]}));
+    arr.sort((x,y)=>{
+      if (y.v !== x.v) return y.v - x.v;
+      return tiePriority[y.k] - tiePriority[x.k];
+    });
+    return [arr[0].k, arr[1].k];
+  }
+
+  function rand5(){
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    let out = "";
+    for (let i=0;i<5;i++) out += chars[Math.floor(Math.random()*chars.length)];
+    return out;
+  }
+
+  function buildCode(total, t1, t2){
+    return `BNI${String(total).padStart(2,"0")}-${t1}${t2}-${rand5()}`;
+  }
+
+  function oneLineBy(grade, t1, t2){
+    // 짧고 단호한 결론(의료 진단 표현 금지)
+    const pair = `${t1}${t2}`;
+    if (grade === "고위험군" && (pair.includes("B") || pair.includes("C"))) {
+      return "통증/소화/수면이 ‘같은 축’으로 흔들릴 가능성이 높습니다. 정밀 분석으로 원인 축을 좁히는 게 빠릅니다.";
+    }
+    if (grade === "주의군") {
+      return "단순 근육 문제로만 보기 어려운 패턴입니다. 당신 타입 기준으로 ‘악화 트리거’를 먼저 끊어야 합니다.";
+    }
+    if (grade === "관심군") {
+      return "초기 흔들림 단계입니다. 지금 정리하면 ‘반복되는 패턴’으로 굳어지는 걸 막을 수 있습니다.";
+    }
+    return "현재는 위험 신호가 크지 않습니다. 다만 반복될수록 회복 비용이 커지므로 패턴 관찰이 중요합니다.";
+  }
+
+  // =========================
+  // 3) UTM/환경정보 수집(익명)
+  // =========================
+  function getUTM(){
+    const p = new URLSearchParams(location.search);
+    return {
+      utm_source: p.get("utm_source") || "",
+      utm_medium: p.get("utm_medium") || "",
+      utm_campaign: p.get("utm_campaign") || "",
+      utm_term: p.get("utm_term") || "",
+      utm_content: p.get("utm_content") || ""
+    };
+  }
+
+  // =========================
+  // 4) 제출/저장
+  // =========================
+  const form = document.getElementById("bniForm");
+  const submitBtn = document.getElementById("submitBtn");
+  const err = document.getElementById("err");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    err.style.display = "none";
+
+    const A_sum = sumSection("A");
+    const B_sum = sumSection("B");
+    const C_sum = sumSection("C");
+    const D_sum = sumSection("D");
+
+    if (A_sum === null || B_sum === null || C_sum === null || D_sum === null) {
+      err.style.display = "block";
+      return;
+    }
+
+    const subScores = {
+      A: scaleTo25(A_sum),
+      B: scaleTo25(B_sum),
+      C: scaleTo25(C_sum),
+      D: scaleTo25(D_sum)
+    };
+    const total = subScores.A + subScores.B + subScores.C + subScores.D;
+
+    const [t1, t2] = pickTop2(subScores);
+    const code = buildCode(total, t1, t2);
+    const g = gradeFrom(total);
+
+    // 화면 표시
+    showResult({ total, subScores, t1, t2, code, grade: g.grade, gradeLine: g.line });
+
+    // 2차 링크(자동 분기용 쿼리 전달)
+    const intakeLink = `${INTAKE_URL}?bni=${encodeURIComponent(code)}&score=${encodeURIComponent(total)}&type=${encodeURIComponent(`${t1}-${t2}`)}`;
+    document.getElementById("ctaMain").setAttribute("href", intakeLink);
+
+    // 저장 payload (개인정보 없음)
+    const payload = {
+      timestamp_client: new Date().toISOString(),
+      bni_code: code,
+      total_score: total,
+      sub_a: subScores.A,
+      sub_b: subScores.B,
+      sub_c: subScores.C,
+      sub_d: subScores.D,
+      type_top1: t1,
+      type_top2: t2,
+
+      // 원문 응답(0~4)
+      A1:getAnswer("A1"), A2:getAnswer("A2"), A3:getAnswer("A3"), A4:getAnswer("A4"),
+      B1:getAnswer("B1"), B2:getAnswer("B2"), B3:getAnswer("B3"), B4:getAnswer("B4"),
+      C1:getAnswer("C1"), C2:getAnswer("C2"), C3:getAnswer("C3"), C4:getAnswer("C4"),
+      D1:getAnswer("D1"), D2:getAnswer("D2"), D3:getAnswer("D3"), D4:getAnswer("D4"),
+
+      ...getUTM(),
+      referrer: document.referrer || "",
+      page_url: location.href,
+      user_agent: navigator.userAgent || ""
+    };
+
+    // Apps Script로 저장 (CORS 문제 회피: no-cors)
+    // 저장 실패해도 사용자 결과는 유지
+    try {
+      submitBtn.disabled = true;
+      await fetch(APPS_SCRIPT_WEBAPP_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+    } catch (ex) {
+      // 조용히 무시: 실험에서는 UX가 우선
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+
+  function showResult({ total, subScores, t1, t2, code, grade, gradeLine }){
+    document.getElementById("result").style.display = "block";
+    document.getElementById("totalText").textContent = `${total} / 100`;
+    document.getElementById("totalBar").style.width = `${Math.max(0, Math.min(100, total))}%`;
+
+    document.getElementById("gradeText").textContent = grade;
+    document.getElementById("gradeLine").textContent = gradeLine;
+
+    document.getElementById("typeText").textContent = `${typeName[t1]} + ${typeName[t2]}`;
+    document.getElementById("typeLine").textContent = `${typeExplain(t1)} / ${typeExplain(t2)}`;
+
+    document.getElementById("codeText").textContent = code;
+
+    document.getElementById("subA").textContent = `${subScores.A} / 25`;
+    document.getElementById("subB").textContent = `${subScores.B} / 25`;
+    document.getElementById("subC").textContent = `${subScores.C} / 25`;
+    document.getElementById("subD").textContent = `${subScores.D} / 25`;
+
+    document.getElementById("oneLine").textContent = oneLineBy(grade, t1, t2);
+
+    // 결과 영역으로 스크롤
+    document.getElementById("result").scrollIntoView({behavior:"smooth", block:"start"});
+  }
+
+  function typeExplain(t){
+    if (t==="A") return "자세·정렬 반응";
+    if (t==="B") return "신경계 민감도";
+    if (t==="C") return "소화/배변 연동";
+    return "회복·유지력";
+  }
+
+  function copyCode(){
+    const code = document.getElementById("codeText").textContent || "";
+    if (!code) return;
+    navigator.clipboard.writeText(code).then(()=> {
+      alert("결과코드를 복사했습니다.");
+    }).catch(()=> {
+      alert("복사 실패: 결과코드를 수동으로 복사해 주세요.");
+    });
+  }
+</script>
+</body>
+</html>
