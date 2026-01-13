@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>BNI 신경-기능 지수 검사 (무료/익명)</title>
   <style>
-    :root { --bg:#f1f3f4; --card:#fff; --text:#111; --muted:#555; --line:#e6e7f0; --accent:#111; }
+    :root { --bg:#f1f3f4; --card:#fff; --text:#111; --muted:#555; --line:#e6e7f0; }
     *{box-sizing:border-box}
     body{margin:0;padding:16px;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",sans-serif}
     .card{max-width:720px;margin:0 auto;background:var(--card);border-radius:12px;box-shadow:0 1px 3px rgba(60,64,67,.25);padding:18px 16px}
@@ -19,7 +19,6 @@
     .scale{display:flex;gap:8px;flex-wrap:wrap}
     .opt{display:flex;align-items:center;gap:6px;border:1px solid var(--line);padding:8px 10px;border-radius:999px;cursor:pointer}
     .opt input{accent-color:#111}
-    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     button{width:100%;padding:12px 14px;border:0;border-radius:12px;background:#111;color:#fff;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
     button:disabled{opacity:.55;cursor:not-allowed}
     .note{font-size:.9rem;color:var(--muted);margin-top:10px;line-height:1.45}
@@ -45,7 +44,7 @@
       이 검사는 ‘통증’ 자체가 아니라, 통증/소화/수면을 흔드는 <b>신경 기능 흐름</b>을 점수화합니다.<br/>
       <b>무료 · 익명</b> (이름/연락처 없음) · 2분 · 즉시 결과
     </p>
-    <div class="row">
+    <div>
       <span class="pill">총점 0~100</span>
       <span class="pill">서브스코어 4개</span>
       <span class="pill">타입 Top2</span>
@@ -53,104 +52,36 @@
     </div>
 
     <form id="bniForm">
-      <!-- A -->
       <div class="section">
         <p class="secTitle">A. 압박/정렬 (자세·반복 삐끗 패턴)</p>
-
-        <div class="q" data-qid="A1">
-          <p>A1. 같은 부위(목/허리/등)가 반복해서 삐끗하거나 담이 옵니다.</p>
-          <div class="scale"></div>
-        </div>
-
-        <div class="q" data-qid="A2">
-          <p>A2. 자세(고개 숙임/오래 앉기/서 있기)에 따라 통증이 확 달라집니다.</p>
-          <div class="scale"></div>
-        </div>
-
-        <div class="q" data-qid="A3">
-          <p>A3. MRI/엑스레이는 큰 문제가 없는데 통증은 계속 반복됩니다.</p>
-          <div class="scale"></div>
-        </div>
-
-        <div class="q" data-qid="A4">
-          <p>A4. 한 번 아프기 시작하면 회복까지 오래 걸리고 잔통증이 남습니다.</p>
-          <div class="scale"></div>
-        </div>
+        <div class="q" data-qid="A1"><p>A1. 같은 부위(목/허리/등)가 반복해서 삐끗하거나 담이 옵니다.</p><div class="scale"></div></div>
+        <div class="q" data-qid="A2"><p>A2. 자세(고개 숙임/오래 앉기/서 있기)에 따라 통증이 확 달라집니다.</p><div class="scale"></div></div>
+        <div class="q" data-qid="A3"><p>A3. MRI/엑스레이는 큰 문제가 없는데 통증은 계속 반복됩니다.</p><div class="scale"></div></div>
+        <div class="q" data-qid="A4"><p>A4. 한 번 아프기 시작하면 회복까지 오래 걸리고 잔통증이 남습니다.</p><div class="scale"></div></div>
       </div>
 
-      <!-- B -->
       <div class="section">
         <p class="secTitle">B. 자율신경 불균형 (불안·수면·컨디션 흔들림)</p>
-
-        <div class="q" data-qid="B1">
-          <p>B1. 통증이 심해질 때 불안/두근거림/식은땀이 같이 옵니다.</p>
-          <div class="scale"></div>
-        </div>
-
-        <div class="q" data-qid="B2">
-          <p>B2. 스트레스나 긴장 후에 증상이 확 악화됩니다.</p>
-          <div class="scale"></div>
-        </div>
-
-        <div class="q" data-qid="B3">
-          <p>B3. 잠이 얕거나 자주 깨거나, 개운하지 않습니다.</p>
-          <div class="scale"></div>
-        </div>
-
-        <div class="q" data-qid="B4">
-          <p>B4. 증상이 들쭉날쭉하고 ‘컨디션’에 따라 크게 흔들립니다.</p>
-          <div class="scale"></div>
-        </div>
+        <div class="q" data-qid="B1"><p>B1. 통증이 심해질 때 불안/두근거림/식은땀이 같이 옵니다.</p><div class="scale"></div></div>
+        <div class="q" data-qid="B2"><p>B2. 스트레스나 긴장 후에 증상이 확 악화됩니다.</p><div class="scale"></div></div>
+        <div class="q" data-qid="B3"><p>B3. 잠이 얕거나 자주 깨거나, 개운하지 않습니다.</p><div class="scale"></div></div>
+        <div class="q" data-qid="B4"><p>B4. 증상이 들쭉날쭉하고 ‘컨디션’에 따라 크게 흔들립니다.</p><div class="scale"></div></div>
       </div>
 
-      <!-- C -->
       <div class="section">
         <p class="secTitle">C. 내장-연동 (소화·배변이 통증 리듬을 건드림)</p>
-
-        <div class="q" data-qid="C1">
-          <p>C1. 소화불량/더부룩함/트림/속쓰림 중 하나 이상이 만성입니다.</p>
-          <div class="scale"></div>
-        </div>
-
-        <div class="q" data-qid="C2">
-          <p>C2. 배변(변비/설사/잔변감)이 불규칙하거나 패턴이 깨져 있습니다.</p>
-          <div class="scale"></div>
-        </div>
-
-        <div class="q" data-qid="C3">
-          <p>C3. 목·등·가슴 답답함과 소화불편이 같이 엮여서 옵니다.</p>
-          <div class="scale"></div>
-        </div>
-
-        <div class="q" data-qid="C4">
-          <p>C4. 음식을 먹고 난 뒤 통증/피로/두통이 더 심해지는 느낌이 있습니다.</p>
-          <div class="scale"></div>
-        </div>
+        <div class="q" data-qid="C1"><p>C1. 소화불량/더부룩함/트림/속쓰림 중 하나 이상이 만성입니다.</p><div class="scale"></div></div>
+        <div class="q" data-qid="C2"><p>C2. 배변(변비/설사/잔변감)이 불규칙하거나 패턴이 깨져 있습니다.</p><div class="scale"></div></div>
+        <div class="q" data-qid="C3"><p>C3. 목·등·가슴 답답함과 소화불편이 같이 엮여서 옵니다.</p><div class="scale"></div></div>
+        <div class="q" data-qid="C4"><p>C4. 음식을 먹고 난 뒤 통증/피로/두통이 더 심해지는 느낌이 있습니다.</p><div class="scale"></div></div>
       </div>
 
-      <!-- D -->
       <div class="section">
         <p class="secTitle">D. 회복력 저하 (회복·유지력 문제)</p>
-
-        <div class="q" data-qid="D1">
-          <p>D1. 아침부터 이미 피곤하거나 무기력한 날이 많습니다.</p>
-          <div class="scale"></div>
-        </div>
-
-        <div class="q" data-qid="D2">
-          <p>D2. 휴식을 해도 피로가 잘 회복되지 않습니다.</p>
-          <div class="scale"></div>
-        </div>
-
-        <div class="q" data-qid="D3">
-          <p>D3. 운동/활동을 하면 좋아지기보다 더 망가지는 느낌이 있습니다.</p>
-          <div class="scale"></div>
-        </div>
-
-        <div class="q" data-qid="D4">
-          <p>D4. 몸이 예민해져 작은 자극(소리/온도/감정)에도 쉽게 무너집니다.</p>
-          <div class="scale"></div>
-        </div>
+        <div class="q" data-qid="D1"><p>D1. 아침부터 이미 피곤하거나 무기력한 날이 많습니다.</p><div class="scale"></div></div>
+        <div class="q" data-qid="D2"><p>D2. 휴식을 해도 피로가 잘 회복되지 않습니다.</p><div class="scale"></div></div>
+        <div class="q" data-qid="D3"><p>D3. 운동/활동을 하면 좋아지기보다 더 망가지는 느낌이 있습니다.</p><div class="scale"></div></div>
+        <div class="q" data-qid="D4"><p>D4. 몸이 예민해져 작은 자극(소리/온도/감정)에도 쉽게 무너집니다.</p><div class="scale"></div></div>
       </div>
 
       <div class="note">
@@ -199,9 +130,7 @@
 
       <div class="note" id="oneLine" style="font-weight:800;color:#111;"></div>
 
-      <!-- 다음 단계(원장님 쪽 링크로 교체) -->
       <div class="ctaRow">
-        <!-- 2차 intake로 넘길 때: code/score/type을 쿼리로 전달 -->
         <a id="ctaMain" class="ctaMain" href="#">정밀 분석 리포트 받기(무료)</a>
         <a class="ctaSub" href="#" onclick="copyCode();return false;">결과코드 복사</a>
       </div>
@@ -211,10 +140,10 @@
 
 <script>
   // =========================
-  // 0) 설정값: 반드시 교체
+  // 0) 설정값 (배포 URL 반영 완료)
   // =========================
-  const APPS_SCRIPT_WEBAPP_URL = "PUT_YOUR_WEBAPP_URL_HERE"; // 예: https://script.google.com/macros/s/XXXX/exec
-  const INTAKE_URL = "https://bodyallhani.github.io/herbmed0/intake.html"; // 2차 정밀문진 페이지(원장님 기존 것)
+  const APPS_SCRIPT_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzWPBIq7vJPL_9ADgmGGn-9ql9i3H25hk94QLnKtB-g9kgd10iNPx8JDEOQDIV8tAUy8g/exec";
+  const INTAKE_URL = "https://bodyallhani.github.io/herbmed0/intake.html"; // 기존 intake 그대로 사용 가능
 
   // =========================
   // 1) 문항 렌더링
@@ -260,6 +189,11 @@
   // 동점 우선순위: B > C > D > A
   const tiePriority = {"B":4,"C":3,"D":2,"A":1};
 
+  function getAnswer(qid){
+    const el = document.querySelector(`input[name="${qid}"]:checked`);
+    return el ? parseInt(el.value,10) : null;
+  }
+
   function sumSection(prefix) {
     let s = 0;
     for (let i=1;i<=4;i++){
@@ -268,11 +202,6 @@
       s += v;
     }
     return s; // 0~16
-  }
-
-  function getAnswer(qid){
-    const el = document.querySelector(`input[name="${qid}"]:checked`);
-    return el ? parseInt(el.value,10) : null;
   }
 
   function scaleTo25(sectionSum0to16){
@@ -307,7 +236,6 @@
   }
 
   function oneLineBy(grade, t1, t2){
-    // 짧고 단호한 결론(의료 진단 표현 금지)
     const pair = `${t1}${t2}`;
     if (grade === "고위험군" && (pair.includes("B") || pair.includes("C"))) {
       return "통증/소화/수면이 ‘같은 축’으로 흔들릴 가능성이 높습니다. 정밀 분석으로 원인 축을 좁히는 게 빠릅니다.";
@@ -319,6 +247,13 @@
       return "초기 흔들림 단계입니다. 지금 정리하면 ‘반복되는 패턴’으로 굳어지는 걸 막을 수 있습니다.";
     }
     return "현재는 위험 신호가 크지 않습니다. 다만 반복될수록 회복 비용이 커지므로 패턴 관찰이 중요합니다.";
+  }
+
+  function typeExplain(t){
+    if (t==="A") return "자세·정렬 반응";
+    if (t==="B") return "신경계 민감도";
+    if (t==="C") return "소화/배변 연동";
+    return "회복·유지력";
   }
 
   // =========================
@@ -371,7 +306,7 @@
     // 화면 표시
     showResult({ total, subScores, t1, t2, code, grade: g.grade, gradeLine: g.line });
 
-    // 2차 링크(자동 분기용 쿼리 전달)
+    // 2차 링크(기존 intake가 쿼리를 무시해도 테스트는 가능)
     const intakeLink = `${INTAKE_URL}?bni=${encodeURIComponent(code)}&score=${encodeURIComponent(total)}&type=${encodeURIComponent(`${t1}-${t2}`)}`;
     document.getElementById("ctaMain").setAttribute("href", intakeLink);
 
@@ -387,7 +322,6 @@
       type_top1: t1,
       type_top2: t2,
 
-      // 원문 응답(0~4)
       A1:getAnswer("A1"), A2:getAnswer("A2"), A3:getAnswer("A3"), A4:getAnswer("A4"),
       B1:getAnswer("B1"), B2:getAnswer("B2"), B3:getAnswer("B3"), B4:getAnswer("B4"),
       C1:getAnswer("C1"), C2:getAnswer("C2"), C3:getAnswer("C3"), C4:getAnswer("C4"),
@@ -399,8 +333,7 @@
       user_agent: navigator.userAgent || ""
     };
 
-    // Apps Script로 저장 (CORS 문제 회피: no-cors)
-    // 저장 실패해도 사용자 결과는 유지
+    // Apps Script로 저장 (CORS 회피: no-cors)
     try {
       submitBtn.disabled = true;
       await fetch(APPS_SCRIPT_WEBAPP_URL, {
@@ -410,7 +343,7 @@
         body: JSON.stringify(payload)
       });
     } catch (ex) {
-      // 조용히 무시: 실험에서는 UX가 우선
+      // 저장 실패해도 UX 우선
     } finally {
       submitBtn.disabled = false;
     }
@@ -436,25 +369,14 @@
 
     document.getElementById("oneLine").textContent = oneLineBy(grade, t1, t2);
 
-    // 결과 영역으로 스크롤
     document.getElementById("result").scrollIntoView({behavior:"smooth", block:"start"});
-  }
-
-  function typeExplain(t){
-    if (t==="A") return "자세·정렬 반응";
-    if (t==="B") return "신경계 민감도";
-    if (t==="C") return "소화/배변 연동";
-    return "회복·유지력";
   }
 
   function copyCode(){
     const code = document.getElementById("codeText").textContent || "";
     if (!code) return;
-    navigator.clipboard.writeText(code).then(()=> {
-      alert("결과코드를 복사했습니다.");
-    }).catch(()=> {
-      alert("복사 실패: 결과코드를 수동으로 복사해 주세요.");
-    });
+    navigator.clipboard.writeText(code).then(()=> alert("결과코드를 복사했습니다."))
+      .catch(()=> alert("복사 실패: 결과코드를 수동으로 복사해 주세요."));
   }
 </script>
 </body>
