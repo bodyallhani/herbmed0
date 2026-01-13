@@ -131,19 +131,19 @@
       <div class="note" id="oneLine" style="font-weight:800;color:#111;"></div>
 
       <div class="ctaRow">
-        <a id="ctaMain" class="ctaMain" href="#">정밀 분석 리포트 받기(무료)</a>
+        <a id="ctaMain" class="ctaMain" href="#">정밀 문진으로 이어서 분석받기</a>
         <a class="ctaSub" href="#" onclick="copyCode();return false;">결과코드 복사</a>
       </div>
-      <div class="tiny">※ 정밀 리포트는 2차 문진(체크형) 완료 후 제공됩니다.</div>
+      <div class="tiny">※ 정밀 문진(m2)에서 BNI 코드가 자동으로 들어가고, 필요한 항목이 먼저 열립니다.</div>
     </div>
   </div>
 
 <script>
   // =========================
-  // 0) 설정값 (배포 URL 반영 완료)
+  // 0) 설정값 (원장님 배포 URL + m2 링크)
   // =========================
   const APPS_SCRIPT_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzWPBIq7vJPL_9ADgmGGn-9ql9i3H25hk94QLnKtB-g9kgd10iNPx8JDEOQDIV8tAUy8g/exec";
-  const INTAKE_URL = "https://bodyallhani.github.io/herbmed0/intake.html"; // 기존 intake 그대로 사용 가능
+  const INTAKE_URL = "https://bodyallhani.github.io/herbmed0/m2.html";
 
   // =========================
   // 1) 문항 렌더링
@@ -185,8 +185,6 @@
     "C":"내장연동형",
     "D":"회복저하형"
   };
-
-  // 동점 우선순위: B > C > D > A
   const tiePriority = {"B":4,"C":3,"D":2,"A":1};
 
   function getAnswer(qid){
@@ -212,10 +210,10 @@
     if (total <= 24) return {grade:"양호군", line:"현재는 큰 위험 신호가 적은 편입니다. 반복 패턴은 초기 관리가 핵심입니다."};
     if (total <= 49) return {grade:"관심군", line:"신경 기능이 흔들리기 시작한 단계입니다. 생활/자세 교정만으로도 변화 여지가 있습니다."};
     if (total <= 69) return {grade:"주의군", line:"증상이 ‘컨디션’과 같이 움직이는 단계입니다. 신경 흐름 평가가 필요한 패턴일 수 있습니다."};
-    return {grade:"고위험군", line:"반복 통증/소화/수면 문제가 ‘한 축’으로 엮였을 가능성이 높습니다. 정밀 분석이 필요한 패턴입니다."};
+    return {grade:"고위험군", line:"반복 통증/소화/수면 문제가 ‘한 축’으로 엮였을 가능성이 높습니다. 정밀 문진으로 원인 축을 좁히는 게 빠릅니다."};
   }
 
-  function pickTop2(subScores){ // subScores: {A:0-25,...}
+  function pickTop2(subScores){
     const arr = Object.keys(subScores).map(k => ({k, v: subScores[k]}));
     arr.sort((x,y)=>{
       if (y.v !== x.v) return y.v - x.v;
@@ -235,17 +233,10 @@
     return `BNI${String(total).padStart(2,"0")}-${t1}${t2}-${rand5()}`;
   }
 
-  function oneLineBy(grade, t1, t2){
-    const pair = `${t1}${t2}`;
-    if (grade === "고위험군" && (pair.includes("B") || pair.includes("C"))) {
-      return "통증/소화/수면이 ‘같은 축’으로 흔들릴 가능성이 높습니다. 정밀 분석으로 원인 축을 좁히는 게 빠릅니다.";
-    }
-    if (grade === "주의군") {
-      return "단순 근육 문제로만 보기 어려운 패턴입니다. 당신 타입 기준으로 ‘악화 트리거’를 먼저 끊어야 합니다.";
-    }
-    if (grade === "관심군") {
-      return "초기 흔들림 단계입니다. 지금 정리하면 ‘반복되는 패턴’으로 굳어지는 걸 막을 수 있습니다.";
-    }
+  function oneLineBy(grade){
+    if (grade === "고위험군") return "통증/소화/수면이 ‘같은 축’으로 흔들릴 가능성이 높습니다. 2차 정밀 문진으로 원인축을 좁히세요.";
+    if (grade === "주의군") return "단순 근육 문제로만 보기 어려운 패턴입니다. 2차 정밀 문진으로 악화 트리거를 먼저 정리하세요.";
+    if (grade === "관심군") return "초기 흔들림 단계입니다. 지금 정리하면 ‘반복되는 패턴’으로 굳는 걸 막을 수 있습니다.";
     return "현재는 위험 신호가 크지 않습니다. 다만 반복될수록 회복 비용이 커지므로 패턴 관찰이 중요합니다.";
   }
 
@@ -303,10 +294,9 @@
     const code = buildCode(total, t1, t2);
     const g = gradeFrom(total);
 
-    // 화면 표시
     showResult({ total, subScores, t1, t2, code, grade: g.grade, gradeLine: g.line });
 
-    // 2차 링크(기존 intake가 쿼리를 무시해도 테스트는 가능)
+    // 2차 링크(m2로) - type은 "B-C" 형태로 전달
     const intakeLink = `${INTAKE_URL}?bni=${encodeURIComponent(code)}&score=${encodeURIComponent(total)}&type=${encodeURIComponent(`${t1}-${t2}`)}`;
     document.getElementById("ctaMain").setAttribute("href", intakeLink);
 
@@ -367,7 +357,7 @@
     document.getElementById("subC").textContent = `${subScores.C} / 25`;
     document.getElementById("subD").textContent = `${subScores.D} / 25`;
 
-    document.getElementById("oneLine").textContent = oneLineBy(grade, t1, t2);
+    document.getElementById("oneLine").textContent = oneLineBy(grade);
 
     document.getElementById("result").scrollIntoView({behavior:"smooth", block:"start"});
   }
