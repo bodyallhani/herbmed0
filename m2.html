@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>바디올한의원 정밀진단 문진 (m2)</title>
+  <title>바디올한의원 정밀진단 문진</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
@@ -555,7 +555,7 @@
       </details>
 
       <button type="button" class="primary" id="allInOneBtn">응답요약 및 복사하기</button>
-      <button type="reset">입력 초기화</button>
+      <button type="reset" id="resetBtn">입력 초기화</button>
     </form>
   </div>
 
@@ -568,7 +568,7 @@
   <button type="button" onclick="copyOutput()">텍스트 복사하기</button>
 
   <script>
-    // ✅ 기존 intake Apps Script URL
+    // ✅ 기존 intake Apps Script URL (그대로)
     const FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbw9gPpp33Flc-QAsd7PdPDjeOGGKkjJqcivUL3wYvpp2qVxBQj-crVRKsx84OuPuEXL/exec";
     const KAKAO_URL = "https://pf.kakao.com/_wdtXK/chat";
 
@@ -624,48 +624,49 @@
       return { score: bni_score, scoreNum: validScore, label: bni_label, code: bni_code, tier };
     }
 
-    // ✅ 자동 분기: 섹션 open/close 제어
-    function applyAutoBranch(){
-      const bni = getBNI();
-
-      // 기본: 전부 닫고, 최소 섹션만 열기
-      const all = [
-        "sec_pattern","sec_general","sec_sleep","sec_digest","sec_auto",
-        "sec_gyne","sec_msk","sec_history","sec_etc"
-      ];
-      all.forEach(id => {
-        const el = document.getElementById(id);
-        if(el) el.open = false;
-      });
-
-      // 항상 열어둘 것: 기본/주증상/동의
-      // sec_basic, sec_main, sec_consent는 이미 open(기본 true)
-
-      // BNI 없으면: 사용자가 알아서 펼치게(추가 오픈 최소)
-      if(!bni.scoreNum && bni.scoreNum !== 0){
-        // 그래도 운영 편의상 "증상양상"은 열어두기
-        const p = document.getElementById("sec_pattern");
-        if(p) p.open = true;
-        return;
-      }
-
-      // 티어별 오픈 규칙
-      if(bni.tier === "RED"){
-        openMany(["sec_general","sec_sleep","sec_digest","sec_auto","sec_msk","sec_history","sec_pattern"]);
-      } else if(bni.tier === "ORANGE"){
-        openMany(["sec_sleep","sec_digest","sec_auto","sec_msk","sec_general","sec_pattern"]);
-      } else if(bni.tier === "YELLOW"){
-        openMany(["sec_sleep","sec_digest","sec_pattern","sec_history"]);
-      } else { // GREEN
-        openMany(["sec_pattern","sec_history"]);
-      }
-    }
-
     function openMany(ids){
       ids.forEach(id => {
         const el = document.getElementById(id);
         if(el) el.open = true;
       });
+    }
+
+    function closeMany(ids){
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.open = false;
+      });
+    }
+
+    // ✅ 자동 분기: "숨김"이 아니라 "가이드(접힘/펼침)"만 제어
+    function applyAutoBranch(){
+      const bni = getBNI();
+
+      // 기본: 추천 섹션 외에는 닫아두기(사용자가 직접 펼칠 수는 있음)
+      const toClose = [
+        "sec_pattern","sec_general","sec_sleep","sec_digest","sec_auto",
+        "sec_gyne","sec_msk","sec_history","sec_etc"
+      ];
+      closeMany(toClose);
+
+      // 항상 열어둘 것(기본/주증상/동의): sec_basic, sec_main, sec_consent는 HTML에서 open 유지
+
+      // BNI 없으면: 운영상 최소로만 열기
+      if(bni.scoreNum === null){
+        openMany(["sec_pattern","sec_history"]);
+        return;
+      }
+
+      // 티어별 오픈 규칙(“필요한 섹션 먼저 열기”)
+      if(bni.tier === "RED"){
+        openMany(["sec_pattern","sec_general","sec_sleep","sec_digest","sec_auto","sec_msk","sec_history"]);
+      } else if(bni.tier === "ORANGE"){
+        openMany(["sec_pattern","sec_sleep","sec_digest","sec_auto","sec_msk","sec_general","sec_history"]);
+      } else if(bni.tier === "YELLOW"){
+        openMany(["sec_pattern","sec_sleep","sec_digest","sec_general","sec_history"]);
+      } else { // GREEN
+        openMany(["sec_pattern","sec_history"]);
+      }
     }
 
     // ✅ 상단 BNI 안내 문구
@@ -674,20 +675,22 @@
       const box = document.getElementById("bniBar");
       if(!box) return;
 
-      if(!b.scoreNum && b.scoreNum !== 0){
+      if(b.scoreNum === null){
         box.innerHTML = `BNI 결과가 없으면, 아래 문진은 기본형으로 진행됩니다. <strong>(그대로 진행하셔도 됩니다)</strong>`;
         return;
       }
+
       let msg = "";
       if(b.tier === "RED") msg = "상위 위험군: 수면·소화·자율신경·통증 섹션이 먼저 열립니다.";
       else if(b.tier === "ORANGE") msg = "고위험군: 연동축(수면-소화-자율신경) 섹션이 먼저 열립니다.";
-      else if(b.tier === "YELLOW") msg = "주의군: 핵심 섹션(수면/소화/패턴)이 먼저 열립니다.";
-      else msg = "안정군: 패턴/기저질환 섹션부터 확인합니다.";
+      else if(b.tier === "YELLOW") msg = "주의군: 핵심 섹션(수면/소화/전신/패턴)이 먼저 열립니다.";
+      else msg = "안정군: 패턴/병력 섹션부터 확인합니다.";
 
       box.innerHTML = `<strong>[BNI]</strong> ${b.score}점 / ${b.label} / 코드: ${b.code}<br>${msg}`;
     }
 
     function collectFormData() {
+      // ✅ Apps Script가 기대하는 키(id) 그대로 유지 (순서와 무관)
       const ids = [
         "name","age","gender","job","workType","sleepHours","caffeine","alcohol","exercise",
         "mainSymptom1","mainSymptom2","mainSymptom3","onset",
@@ -705,7 +708,7 @@
       ids.forEach(id => data[id] = v(id));
       data.visitStatus = getVisitStatus();
 
-      // (시트에는 저장 안 되지만) 향후 확장 대비로 같이 전송
+      // ✅ 시트/Apps Script는 무시하지만, 향후 확장 대비로 함께 전송(열오류 없음)
       const bni = getBNI();
       data.bni_score = bni.score;
       data.bni_label = bni.label;
@@ -723,7 +726,7 @@
       }).catch(err => console.error("문진 저장 에러:", err));
     }
 
-    // ✅ summary_text 맨 위에 BNI 2줄 삽입
+    // ✅ summary_text 맨 위에 BNI 2줄 삽입 (시트 AZ로 저장됨)
     function buildSummary(consentTime) {
       const bni = getBNI();
       const bniLine1 = (bni.score || bni.label || bni.code)
@@ -864,6 +867,14 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
+    // ✅ reset 후에도 분기 상태 재적용(사용자 입장에서 “추천 섹션이 다시 열리도록”)
+    document.getElementById("intakeForm").addEventListener("reset", function(){
+      setTimeout(() => {
+        // 동의 체크는 브라우저 기본 reset 동작으로 해제됨
+        applyAutoBranch();
+      }, 0);
+    });
+
     document.getElementById("allInOneBtn").addEventListener("click", function () {
       const consentCheckbox = document.getElementById("privacyConsent");
       if (!consentCheckbox.checked) {
@@ -886,9 +897,9 @@
       document.getElementById("output").value = summaryText;
       copyText(summaryText);
 
-      // 3) 서버 전송
+      // 3) 서버 전송 (✅ 기존 시트/열 맵핑 유지)
       const data = collectFormData();
-      data.summary_text = summaryText;   // ✅ AZ(문진텍스트)
+      data.summary_text = summaryText;   // ✅ Apps Script가 AZ에 저장
       data.summary = summaryText;        // 호환
       data.kakao_summary = summaryText;  // 호환
       sendToServer(data);
@@ -901,7 +912,7 @@
       window.location.href = KAKAO_URL;
     });
 
-    // ✅ 로드시: BNI 바 표시(인트로에서 바로 보이게)
+    // ✅ 로드시: 인트로에서 BNI 바 표시
     renderBNIBar();
   </script>
 </body>
