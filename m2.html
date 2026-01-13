@@ -142,8 +142,6 @@
       align-items: center;
       gap: 4px;
     }
-
-    /* ✅ 인트로 이미지 (요청사항) */
     .intro-image {
       margin-top: 10px;
       border-radius: 10px;
@@ -156,6 +154,23 @@
 <body>
   <h1>바디올한의원 정밀 문진</h1>
 
+  <!-- ✅ BNI 결과 표시 (m1에서 넘어온 값 자동 표시) -->
+  <div id="bniCard" class="card hidden">
+    <div class="badge">BNI 결과 연동됨</div>
+    <p class="intro-title" style="margin-top:0;">당신의 BNI(신경-기능 지수) 결과</p>
+    <ul class="intro-list" style="margin-top:6px;">
+      <li><strong>결과코드:</strong> <span id="bniCodeView">-</span></li>
+      <li><strong>총점:</strong> <span id="bniScoreView">-</span> / 100</li>
+      <li><strong>타입:</strong> <span id="bniTypeView">-</span></li>
+    </ul>
+    <p class="intro-sub">BNI 타입 기준으로 필요한 항목이 먼저 열립니다. (원하시면 모든 항목 추가 작성 가능)</p>
+  </div>
+
+  <!-- ✅ BNI 숨김 필드(요약문/서버저장에 포함시키기 위함) -->
+  <input type="hidden" id="bni_code" />
+  <input type="hidden" id="bni_score" />
+  <input type="hidden" id="bni_type" />
+
   <!-- 인트로 영역: 처음엔 이것만 보이게 -->
   <div id="intro" class="card">
     <div class="badge">1분 문진 · 대표원장 직접 분석</div>
@@ -164,7 +179,7 @@
       " 한의학적으로 한번은 제대로 분석해보세요. ”
     </p>
     <p class="hint">
-      <strong>★★필독★★</strong><br>    
+      <strong>★★필독★★</strong><br>
       <strong>[설문 완료]→[파란 버튼]→[자동 병원카톡 이동됨]<br>
         ->[채팅창 길게 눌러 붙여넣기]→[카톡메시지 전송]<br>
         →[간편진단예약 완료]</strong><br>
@@ -172,14 +187,11 @@
       <strong>위 순서로 해주셔야, 예약누락이 없습니다</strong> <br>
       마지막에 실제 방법이 잘 나와있습니다. <br>
       진단예약 누락되지않도록 해주세요 ^^
-      
-      <br>
-      <br>
-      ✔ 1분만에 적고싶은 항목만 적으셔도 분석은 가능합니다.<br>
-      ✔ 단, <strong>상세하게 적어주실수록, 결과는 정밀</strong>해집니다.<br>
-      <br>
 
-      <!-- ✅ 이미지 삽입 (요청사항) -->
+      <br><br>
+      ✔ 1분만에 적고싶은 항목만 적으셔도 분석은 가능합니다.<br>
+      ✔ 단, <strong>상세하게 적어주실수록, 결과는 정밀</strong>해집니다.<br><br>
+
       <img
         class="intro-image"
         src="https://raw.githubusercontent.com/bodyallhani/herbmed0/main/jinmak.jpg"
@@ -191,7 +203,6 @@
       <li>소화,수면,자율신경,피부,통증패턴까지 <strong>한번에 확인</strong><br>할 수 있습니다.</li>
       <li>해당 페이지는 <strong>진단 효율을 위해 제작된 요약 프로그램</strong>으로, 자동 분석기능은 없습니다.</li>
       <li><strong>한의사가 직접 해석</strong>해야하는 문진표입니다.</li>
-      <!-- ✅ 설명문 수정: 올인원 흐름 반영 -->
       <li><strong>최종응답 버튼</strong>을 누르면, 응답하신 내용이 <strong>자동복사</strong>되고 <strong>카카오채널 채팅창으로 바로 이동</strong>합니다.</li>
     </ul>
 
@@ -211,7 +222,8 @@
     </p>
 
     <form id="intakeForm">
-      <fieldset>
+
+      <fieldset id="fs_basic">
         <legend>기본정보</legend>
 
         <label><strong>바디올한의원에 현재 계시거나, 내원하신 적이 있으신가요?</strong></label>
@@ -255,7 +267,7 @@
         </label>
       </fieldset>
 
-      <fieldset>
+      <fieldset id="fs_main">
         <legend><strong>주증상</strong></legend>
         <label>가장 불편한 증상 1:
           <input type="text" id="mainSymptom1" placeholder="예: 어지럼, 두근거림, 수면장애 등" />
@@ -271,7 +283,7 @@
         </label>
       </fieldset>
 
-      <fieldset>
+      <fieldset id="fs_pattern">
         <legend><strong>증상양상</strong></legend>
         <label>하루 중 어느 시간대에 가장 심한가요?
           <input type="text" id="worseTime" placeholder="예: 아침 기상 직후 / 오후 3~5시 / 밤 / 일정치 않음 등" />
@@ -287,7 +299,7 @@
         </label>
       </fieldset>
 
-      <fieldset>
+      <fieldset id="fs_allbody">
         <legend>전신 증상 (0~10)</legend>
         <p class="hint">0 = 전혀 없음, 10 = 가장 심함</p>
         <label>피로감:
@@ -310,7 +322,7 @@
         </label>
       </fieldset>
 
-      <fieldset>
+      <fieldset id="fs_sleep">
         <legend>수면</legend>
         <label>잠들기까지 보통 어느 정도 걸리나요? (입면 문제):
           <textarea id="sleepOnset" placeholder="예: 10~20분, 1시간 이상, 눕자마자 잠 등"></textarea>
@@ -326,7 +338,7 @@
         </label>
       </fieldset>
 
-      <fieldset>
+      <fieldset id="fs_gi">
         <legend>소화기</legend>
         <label>식욕 상태:
           <input type="text" id="appetite" placeholder="예: 정상 / 감소 / 과식 경향 등" />
@@ -345,7 +357,7 @@
         </label>
       </fieldset>
 
-      <fieldset>
+      <fieldset id="fs_auto">
         <legend>자율신경 관련</legend>
         <label>손발이 차갑거나 뜨거운 편인가요?
           <textarea id="extremitiesTemp"></textarea>
@@ -364,7 +376,7 @@
         </label>
       </fieldset>
 
-      <fieldset>
+      <fieldset id="fs_gyne">
         <legend>부인과 (여성만 작성, 해당 없으면 비워두기)</legend>
         <label>생리 주기/양/통증, 생리 전후 변화:
           <textarea id="gyne"></textarea>
@@ -374,7 +386,7 @@
         </label>
       </fieldset>
 
-      <fieldset>
+      <fieldset id="fs_msk">
         <legend>통증/근골격</legend>
         <label>목/어깨/등/허리 통증 여부와 양상:
           <textarea id="pain"></textarea>
@@ -393,7 +405,7 @@
         </label>
       </fieldset>
 
-      <fieldset>
+      <fieldset id="fs_dx">
         <legend>기존 진단/복용약/가족력</legend>
         <label>지금까지 병원에서 들은 진단명:
           <textarea id="diagnosis"></textarea>
@@ -409,14 +421,14 @@
         </label>
       </fieldset>
 
-      <fieldset>
+      <fieldset id="fs_etc">
         <legend>기타</legend>
         <label>특히 걱정되거나, 꼭 말씀하고 싶은 내용:
           <textarea id="etc"></textarea>
         </label>
       </fieldset>
 
-      <fieldset>
+      <fieldset id="fs_consent">
         <legend>개인정보 수집·이용 동의 (필수)</legend>
         <div class="consent-box">
           <p>바디올한의원은 아래 목적을 위해 문진표에 기재된 내용을 수집·이용합니다.</p>
@@ -433,13 +445,11 @@
         </div>
       </fieldset>
 
-      <!-- ✅ 올인원 버튼 (UI 변경 최소: 기존 위치에서 한 번에 처리) -->
       <button type="button" class="primary" id="allInOneBtn">응답요약 및 복사하기</button>
       <button type="reset">입력 초기화</button>
     </form>
   </div>
 
-  <!-- 아래 영역은 UI 유지(보이더라도 기능 흐름은 올인원으로 끝) -->
   <h2>문진 텍스트</h2>
   <p class="hint">
     아래 내용은 자동으로 복사됩니다.<br>
@@ -451,6 +461,82 @@
   <script>
     const FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbw9gPpp33Flc-QAsd7PdPDjeOGGKkjJqcivUL3wYvpp2qVxBQj-crVRKsx84OuPuEXL/exec";
     const KAKAO_URL = "https://pf.kakao.com/_wdtXK/chat";
+
+    // ✅ BNI 연동: URL에서 bni/score/type 읽기 + 자동 접기/오픈
+    function getBNIFromURL() {
+      const p = new URLSearchParams(location.search);
+      return {
+        bni: (p.get("bni") || "").trim(),
+        score: (p.get("score") || "").trim(),
+        type: (p.get("type") || "").trim() // 예: "B-C"
+      };
+    }
+
+    function collapseAllSections() {
+      // 기본/주증상은 유지, 나머지는 접기(숨김)
+      const idsToHide = ["fs_pattern","fs_allbody","fs_sleep","fs_gi","fs_auto","fs_gyne","fs_msk","fs_dx","fs_etc"];
+      idsToHide.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = "none";
+      });
+    }
+
+    function openSection(id) {
+      const el = document.getElementById(id);
+      if (el) el.style.display = "block";
+    }
+
+    function addExpandAllButtonOnce() {
+      if (document.getElementById("expandAllBtn")) return;
+      const hint = document.querySelector("#formContainer .hint");
+      if (!hint) return;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.id = "expandAllBtn";
+      btn.textContent = "추가로 더 작성하기(전체 항목 펼치기)";
+      btn.style.marginTop = "10px";
+      btn.onclick = () => {
+        ["fs_pattern","fs_allbody","fs_sleep","fs_gi","fs_auto","fs_gyne","fs_msk","fs_dx","fs_etc"].forEach(openSection);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      };
+      hint.parentNode.insertBefore(btn, hint.nextSibling);
+    }
+
+    function applyBNIAutoOpen() {
+      const { bni, score, type } = getBNIFromURL();
+      if (!bni && !score && !type) return;
+
+      // 카드 표시
+      const card = document.getElementById("bniCard");
+      if (card) card.classList.remove("hidden");
+      const setText = (id, val) => { const el=document.getElementById(id); if(el) el.textContent = val || "-"; };
+      setText("bniCodeView", bni);
+      setText("bniScoreView", score);
+      setText("bniTypeView", type);
+
+      // hidden 세팅
+      document.getElementById("bni_code").value = bni || "";
+      document.getElementById("bni_score").value = score || "";
+      document.getElementById("bni_type").value = type || "";
+
+      // 접고, 필요한 섹션만 우선 오픈
+      collapseAllSections();
+
+      // 증상양상은 진단 품질 위해 기본 오픈
+      openSection("fs_pattern");
+
+      // type 파싱
+      const parts = type.replace(/[^A-D\-]/g,"").split("-").filter(Boolean);
+
+      if (parts.includes("A")) openSection("fs_msk");
+      if (parts.includes("B")) { openSection("fs_auto"); openSection("fs_sleep"); }
+      if (parts.includes("C")) openSection("fs_gi");
+      if (parts.includes("D")) { openSection("fs_sleep"); openSection("fs_allbody"); }
+
+      addExpandAllButtonOnce();
+    }
+
+    window.addEventListener("DOMContentLoaded", applyBNIAutoOpen);
 
     function v(id) {
       return (document.getElementById(id).value || "").trim();
@@ -491,6 +577,12 @@
       const data = {};
       ids.forEach(id => data[id] = v(id));
       data.visitStatus = getVisitStatus();
+
+      // ✅ BNI 값도 서버 저장에 포함
+      data.bni_code = v("bni_code");
+      data.bni_score = v("bni_score");
+      data.bni_type = v("bni_type");
+
       return data;
     }
 
@@ -506,6 +598,18 @@
     function buildSummary(consentTime) {
       const l = [];
       const visitStatus = getVisitStatus();
+
+      // ✅ BNI 헤더 자동 삽입
+      const bniCode = v("bni_code");
+      const bniScore = v("bni_score");
+      const bniType = v("bni_type");
+      if (bniCode || bniScore || bniType) {
+        l.push("[BNI 1차 지수 결과]");
+        l.push("- 결과코드: " + (bniCode || ""));
+        l.push("- 총점: " + (bniScore || ""));
+        l.push("- 타입: " + (bniType || ""));
+        l.push("");
+      }
 
       l.push("[개인정보 수집·이용 동의: 동의함 / " + consentTime + "]");
       l.push("");
@@ -648,15 +752,15 @@
       // 1) 요약 생성
       const summaryText = buildSummary(consentTime);
 
-      // 2) 화면 출력(기존 UI 유지) + 자동복사
+      // 2) 화면 출력 + 자동복사
       document.getElementById("output").value = summaryText;
       copyText(summaryText);
 
-      // 3) 서버 전송: ✅ AZ 저장을 위해 summary_text 필드 추가
+      // 3) 서버 전송
       const data = collectFormData();
-      data.summary_text = summaryText;      // ✅ Apps Script AZ로 들어갈 값
-      data.summary = summaryText;           // (호환용)
-      data.kakao_summary = summaryText;     // (호환용)
+      data.summary_text = summaryText;
+      data.summary = summaryText;
+      data.kakao_summary = summaryText;
       sendToServer(data);
 
       // 4) 안내 후 카카오 이동
