@@ -2,458 +2,445 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>BNI 신경-기능 지수 테스트 (m1)</title>
+  <title>BNI 신경-기능지수 테스트</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body{
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      max-width:900px;margin:0 auto;padding:16px;line-height:1.5;
-      background:#f7f7f9;color:#111;
+      max-width:900px;margin:0 auto;padding:16px;
+      background:#f7f7f9;line-height:1.55;
     }
-    h1{margin:8px 0 6px;font-size:1.35rem}
-    .sub{color:#555;font-size:0.92rem;margin:0 0 14px}
+    h1{margin:10px 0 14px;}
     .card{
       background:#fff;border:1px solid #e0e3ec;border-radius:12px;
-      box-shadow:0 2px 6px rgba(0,0,0,0.04);padding:14px;margin-top:12px;
+      padding:16px;box-shadow:0 2px 6px rgba(0,0,0,0.04);
     }
-    .badge{
-      display:inline-block;font-size:0.78rem;padding:4px 8px;border-radius:999px;
-      background:#e8f0fe;color:#1a73e8;font-weight:700;margin-bottom:8px;
-    }
-    .hint{color:#666;font-size:0.85rem;margin:8px 0 0}
+    .hint{font-size:0.9rem;color:#555;margin-top:6px;}
     .q{
-      padding:12px;border:1px solid #d9deea;border-radius:12px;background:#fff;
-      margin:12px 0;
+      margin-top:12px;padding:12px;border:1px solid #e6eaf4;border-radius:12px;background:#fafbff;
     }
-    .qtitle{font-weight:800;margin-bottom:10px}
-    .opts{
-      display:flex;flex-direction:column;gap:8px;
-      padding-top:2px;
-    }
+    .q .title{font-weight:700;margin-bottom:10px;}
     .opt{
-      display:flex;align-items:center;gap:8px;
-      padding:10px 10px;border:1px solid #e5e9f3;border-radius:10px;
-      background:#fafbff;
+      display:flex;flex-direction:column;gap:8px;
+      margin-top:8px;
     }
-    .opt input{transform:scale(1.15)}
+    .opt label{
+      display:flex;align-items:center;gap:8px;
+      padding:10px 10px;border:1px solid #d9deea;border-radius:10px;background:#fff;
+      cursor:pointer;
+    }
+    .opt input{transform:scale(1.05);}
     .row{
-      display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px;
+      display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;
     }
     button{
-      padding:12px 14px;border-radius:10px;border:1px solid #888;background:#fff;
-      cursor:pointer;font-weight:700;
+      padding:10px 14px;border-radius:10px;border:1px solid #888;background:#fff;cursor:pointer;
+      font-size:0.95rem;
     }
     button.primary{
-      background:#1a73e8;color:#fff;border-color:#1a73e8;
+      background:#1a73e8;color:#fff;border-color:#1a73e8;font-weight:700;
     }
-    button:disabled{opacity:0.6;cursor:not-allowed}
-    .err{color:#b00020;font-weight:700;margin-top:10px}
-    /* 결과 패널(검은 배경) */
-    .result{
-      background:#0b0f1a;color:#e9edf7;border-radius:14px;
-      padding:14px;border:1px solid rgba(255,255,255,0.08);
-    }
-    .result .big{font-size:1.15rem;font-weight:900}
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
-    .hr{height:1px;background:rgba(255,255,255,0.12);margin:10px 0}
-    /* 계산중 오버레이 */
+    button:disabled{opacity:0.6;cursor:not-allowed;}
+    .tiny{font-size:0.82rem;color:#666;margin-top:10px;}
+
+    /* ===== 결과 오버레이 (검은 화면) ===== */
     .overlay{
-      position:fixed;inset:0;background:rgba(0,0,0,0.72);
-      display:none;align-items:center;justify-content:center;z-index:9999;
-      padding:16px;
+      position:fixed;inset:0;background:rgba(0,0,0,0.92);
+      display:none;align-items:center;justify-content:center;
+      padding:16px;z-index:9999;
     }
-    .overlay.on{display:flex}
-    .overlay-box{
-      width:min(420px,100%);background:#0b0f1a;color:#e9edf7;
-      border:1px solid rgba(255,255,255,0.12);border-radius:14px;
-      padding:16px 14px;
+    .overlay.show{display:flex;}
+    .result-card{
+      width:min(720px,100%);
+      border:1px solid rgba(255,255,255,0.14);
+      border-radius:16px;padding:18px 16px;
+      background:rgba(15,15,20,0.35);
+      box-shadow:0 10px 30px rgba(0,0,0,0.35);
+      color:#f2f3f7;
     }
-    .spinner{
-      width:22px;height:22px;border-radius:50%;
-      border:3px solid rgba(255,255,255,0.18);
-      border-top-color:#fff;animation:spin 0.9s linear infinite;
-      margin-right:10px;
+    .res-title{
+      font-weight:800;font-size:1.1rem;letter-spacing:0.2px;
+      margin-bottom:10px;
     }
-    @keyframes spin{to{transform:rotate(360deg)}}
-    .calc-row{display:flex;align-items:center;gap:10px}
-    .calc-title{font-weight:900}
-    .calc-sub{font-size:0.9rem;color:#b9c2da;margin-top:6px}
-    .hidden{display:none}
+    .loader{
+      display:flex;align-items:center;gap:10px;
+      margin:10px 0 6px;
+      color:#dfe6ff;font-weight:700;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      background:#9db7ff;animation:bounce 1s infinite ease-in-out;
+    }
+    .dot:nth-child(2){animation-delay:0.12s;}
+    .dot:nth-child(3){animation-delay:0.24s;}
+    @keyframes bounce{
+      0%,80%,100%{transform:translateY(0);opacity:0.6;}
+      40%{transform:translateY(-6px);opacity:1;}
+    }
+    .res-block{
+      margin-top:10px;
+      border-top:1px solid rgba(255,255,255,0.12);
+      padding-top:12px;
+      display:none;
+    }
+    .line{margin:6px 0;}
+    .big{
+      font-size:1.55rem;font-weight:900;letter-spacing:0.3px;
+      margin:10px 0 6px;
+    }
+    .badge{
+      display:inline-block;
+      padding:6px 10px;border-radius:999px;font-weight:900;
+      margin-left:8px;font-size:0.92rem;
+      border:1px solid rgba(255,255,255,0.2);
+    }
+    /* 밝은 계열 강조색 (검은 배경 대비) */
+    .c-green{color:#a7ffeb;}
+    .c-yellow{color:#fff59d;}
+    .c-orange{color:#ffd180;}
+    .c-red{color:#ff8a80;}
+    .b-green{background:rgba(0,230,118,0.15); color:#a7ffeb;}
+    .b-yellow{background:rgba(255,235,59,0.14); color:#fff59d;}
+    .b-orange{background:rgba(255,152,0,0.14); color:#ffd180;}
+    .b-red{background:rgba(244,67,54,0.14); color:#ff8a80;}
+
+    .res-note{
+      margin-top:10px;color:#cfd6ea;font-size:0.9rem;
+      line-height:1.55;
+    }
+    .res-actions{
+      display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;
+    }
+    .btn-ghost{
+      background:transparent;border:1px solid rgba(255,255,255,0.28);
+      color:#f2f3f7;
+    }
+    .btn-next{
+      background:#1a73e8;border:1px solid #1a73e8;color:#fff;font-weight:900;
+    }
+    .subcopy{font-size:0.92rem;color:#d6def5;margin-top:6px;}
   </style>
 </head>
 <body>
-
-  <h1>BNI 신경-기능 지수 테스트 (m1)</h1>
-  <p class="sub">익명 · 60초 · 결과 즉시 확인 → 원하시면 정밀문진(m2)로 연결됩니다.</p>
+  <h1>BNI 테스트 (m1)</h1>
 
   <div class="card">
-    <div class="badge">응답 방식</div>
     <div class="hint">
-      각 문항에 대해 아래 5단계로 선택해 주세요.<br>
-      (전혀 아니다 / 아니다 / 보통 / 그렇다 / 매우 그렇다)
+      아래 문항은 “진단”이 아니라 <strong>신경-기능 패턴을 빠르게 요약</strong>하기 위한 지수입니다.<br>
+      답하기 애매하면 “보통”을 선택하셔도 됩니다.
     </div>
-  </div>
 
-  <form id="bniForm">
-
-    <!-- 문항 12개 예시 (원장님이 원하시면 더 늘려서 AH까지 확장 가능) -->
-    <div class="q" data-q="Q01">
-      <div class="qtitle">1. 검사상 큰 이상이 없다고 들었는데도, 불편감(통증/저림/답답함)이 계속됩니다.</div>
-      <div class="opts">
-        <label class="opt"><input type="radio" name="Q01" value="0"> 전혀 아니다</label>
-        <label class="opt"><input type="radio" name="Q01" value="1"> 아니다</label>
-        <label class="opt"><input type="radio" name="Q01" value="2"> 보통</label>
-        <label class="opt"><input type="radio" name="Q01" value="3"> 그렇다</label>
-        <label class="opt"><input type="radio" name="Q01" value="4"> 매우 그렇다</label>
+    <!-- ===== 5점 리커트 문항 예시 (필요 시 여기 문항을 더 추가/교체하세요) ===== -->
+    <div class="q" data-key="A1" data-weight="1.0">
+      <div class="title">1) 검사에서 큰 이상이 없다고 들었는데도, 불편감(통증/저림/답답함)이 계속됩니다.</div>
+      <div class="opt">
+        <label><input type="radio" name="A1" value="0"> 전혀 아니다</label>
+        <label><input type="radio" name="A1" value="1"> 아니다</label>
+        <label><input type="radio" name="A1" value="2"> 보통</label>
+        <label><input type="radio" name="A1" value="3"> 그렇다</label>
+        <label><input type="radio" name="A1" value="4"> 매우 그렇다</label>
       </div>
     </div>
 
-    <div class="q" data-q="Q02">
-      <div class="qtitle">2. 스트레스가 있으면 증상이 바로 악화되거나, 몸이 급격히 예민해집니다.</div>
-      <div class="opts">
-        <label class="opt"><input type="radio" name="Q02" value="0"> 전혀 아니다</label>
-        <label class="opt"><input type="radio" name="Q02" value="1"> 아니다</label>
-        <label class="opt"><input type="radio" name="Q02" value="2"> 보통</label>
-        <label class="opt"><input type="radio" name="Q02" value="3"> 그렇다</label>
-        <label class="opt"><input type="radio" name="Q02" value="4"> 매우 그렇다</label>
+    <div class="q" data-key="A2" data-weight="1.0">
+      <div class="title">2) 수면이 얕거나(자주 깸/꿈 많음), 자고 일어나도 개운하지 않습니다.</div>
+      <div class="opt">
+        <label><input type="radio" name="A2" value="0"> 전혀 아니다</label>
+        <label><input type="radio" name="A2" value="1"> 아니다</label>
+        <label><input type="radio" name="A2" value="2"> 보통</label>
+        <label><input type="radio" name="A2" value="3"> 그렇다</label>
+        <label><input type="radio" name="A2" value="4"> 매우 그렇다</label>
       </div>
     </div>
 
-    <div class="q" data-q="Q03">
-      <div class="qtitle">3. 잠이 얕거나(중간 각성/꿈 많음), 자고 일어나도 회복이 잘 안 됩니다.</div>
-      <div class="opts">
-        <label class="opt"><input type="radio" name="Q03" value="0"> 전혀 아니다</label>
-        <label class="opt"><input type="radio" name="Q03" value="1"> 아니다</label>
-        <label class="opt"><input type="radio" name="Q03" value="2"> 보통</label>
-        <label class="opt"><input type="radio" name="Q03" value="3"> 그렇다</label>
-        <label class="opt"><input type="radio" name="Q03" value="4"> 매우 그렇다</label>
+    <div class="q" data-key="B1" data-weight="1.0">
+      <div class="title">3) 식후 더부룩함/속쓰림/메스꺼움 등 소화 불편이 반복됩니다.</div>
+      <div class="opt">
+        <label><input type="radio" name="B1" value="0"> 전혀 아니다</label>
+        <label><input type="radio" name="B1" value="1"> 아니다</label>
+        <label><input type="radio" name="B1" value="2"> 보통</label>
+        <label><input type="radio" name="B1" value="3"> 그렇다</label>
+        <label><input type="radio" name="B1" value="4"> 매우 그렇다</label>
       </div>
     </div>
 
-    <div class="q" data-q="Q04">
-      <div class="qtitle">4. 소화가 쉽게 무너지거나(더부룩/체함/속쓰림), 식후 컨디션이 뚝 떨어집니다.</div>
-      <div class="opts">
-        <label class="opt"><input type="radio" name="Q04" value="0"> 전혀 아니다</label>
-        <label class="opt"><input type="radio" name="Q04" value="1"> 아니다</label>
-        <label class="opt"><input type="radio" name="Q04" value="2"> 보통</label>
-        <label class="opt"><input type="radio" name="Q04" value="3"> 그렇다</label>
-        <label class="opt"><input type="radio" name="Q04" value="4"> 매우 그렇다</label>
+    <div class="q" data-key="C1" data-weight="1.0">
+      <div class="title">4) 두근거림/불안/숨 답답함/식은땀 같은 자율신경 증상이 자주 나타납니다.</div>
+      <div class="opt">
+        <label><input type="radio" name="C1" value="0"> 전혀 아니다</label>
+        <label><input type="radio" name="C1" value="1"> 아니다</label>
+        <label><input type="radio" name="C1" value="2"> 보통</label>
+        <label><input type="radio" name="C1" value="3"> 그렇다</label>
+        <label><input type="radio" name="C1" value="4"> 매우 그렇다</label>
       </div>
     </div>
 
-    <div class="q" data-q="Q05">
-      <div class="qtitle">5. 가슴 답답함/숨이 짧음/한숨이 잦음 같은 호흡 불편이 있습니다.</div>
-      <div class="opts">
-        <label class="opt"><input type="radio" name="Q05" value="0"> 전혀 아니다</label>
-        <label class="opt"><input type="radio" name="Q05" value="1"> 아니다</label>
-        <label class="opt"><input type="radio" name="Q05" value="2"> 보통</label>
-        <label class="opt"><input type="radio" name="Q05" value="3"> 그렇다</label>
-        <label class="opt"><input type="radio" name="Q05" value="4"> 매우 그렇다</label>
-      </div>
-    </div>
-
-    <div class="q" data-q="Q06">
-      <div class="qtitle">6. 두근거림/불안/초조가 이유 없이 올라오거나, 사람 많은 곳에서 더 심해집니다.</div>
-      <div class="opts">
-        <label class="opt"><input type="radio" name="Q06" value="0"> 전혀 아니다</label>
-        <label class="opt"><input type="radio" name="Q06" value="1"> 아니다</label>
-        <label class="opt"><input type="radio" name="Q06" value="2"> 보통</label>
-        <label class="opt"><input type="radio" name="Q06" value="3"> 그렇다</label>
-        <label class="opt"><input type="radio" name="Q06" value="4"> 매우 그렇다</label>
-      </div>
-    </div>
-
-    <div class="q" data-q="Q07">
-      <div class="qtitle">7. 손발이 차거나 뜨거운 느낌이 자주 변하고, 체온/날씨 변화에 민감합니다.</div>
-      <div class="opts">
-        <label class="opt"><input type="radio" name="Q07" value="0"> 전혀 아니다</label>
-        <label class="opt"><input type="radio" name="Q07" value="1"> 아니다</label>
-        <label class="opt"><input type="radio" name="Q07" value="2"> 보통</label>
-        <label class="opt"><input type="radio" name="Q07" value="3"> 그렇다</label>
-        <label class="opt"><input type="radio" name="Q07" value="4"> 매우 그렇다</label>
-      </div>
-    </div>
-
-    <div class="q" data-q="Q08">
-      <div class="qtitle">8. 어지럼/기립 시 불편(핑 도는 느낌)이 자주 있거나, 쉽게 지칩니다.</div>
-      <div class="opts">
-        <label class="opt"><input type="radio" name="Q08" value="0"> 전혀 아니다</label>
-        <label class="opt"><input type="radio" name="Q08" value="1"> 아니다</label>
-        <label class="opt"><input type="radio" name="Q08" value="2"> 보통</label>
-        <label class="opt"><input type="radio" name="Q08" value="3"> 그렇다</label>
-        <label class="opt"><input type="radio" name="Q08" value="4"> 매우 그렇다</label>
-      </div>
-    </div>
-
-    <div class="q" data-q="Q09">
-      <div class="qtitle">9. 근육 문제처럼 보여도, 같은 부위가 반복적으로 삐끗하거나 통증이 재발합니다.</div>
-      <div class="opts">
-        <label class="opt"><input type="radio" name="Q09" value="0"> 전혀 아니다</label>
-        <label class="opt"><input type="radio" name="Q09" value="1"> 아니다</label>
-        <label class="opt"><input type="radio" name="Q09" value="2"> 보통</label>
-        <label class="opt"><input type="radio" name="Q09" value="3"> 그렇다</label>
-        <label class="opt"><input type="radio" name="Q09" value="4"> 매우 그렇다</label>
-      </div>
-    </div>
-
-    <div class="q" data-q="Q10">
-      <div class="qtitle">10. 소리/빛/냄새 같은 자극에 예민하거나, 긴장하면 몸이 바로 굳습니다.</div>
-      <div class="opts">
-        <label class="opt"><input type="radio" name="Q10" value="0"> 전혀 아니다</label>
-        <label class="opt"><input type="radio" name="Q10" value="1"> 아니다</label>
-        <label class="opt"><input type="radio" name="Q10" value="2"> 보통</label>
-        <label class="opt"><input type="radio" name="Q10" value="3"> 그렇다</label>
-        <label class="opt"><input type="radio" name="Q10" value="4"> 매우 그렇다</label>
-      </div>
-    </div>
-
-    <div class="q" data-q="Q11">
-      <div class="qtitle">11. 땀이 이상하게 나거나(식은땀/긴장 시 땀), 피로가 쌓이면 더 심해집니다.</div>
-      <div class="opts">
-        <label class="opt"><input type="radio" name="Q11" value="0"> 전혀 아니다</label>
-        <label class="opt"><input type="radio" name="Q11" value="1"> 아니다</label>
-        <label class="opt"><input type="radio" name="Q11" value="2"> 보통</label>
-        <label class="opt"><input type="radio" name="Q11" value="3"> 그렇다</label>
-        <label class="opt"><input type="radio" name="Q11" value="4"> 매우 그렇다</label>
-      </div>
-    </div>
-
-    <div class="q" data-q="Q12">
-      <div class="qtitle">12. 한 가지 치료로는 잘 해결되지 않고, 여러 증상이 같이 엮여 움직이는 느낌입니다.</div>
-      <div class="opts">
-        <label class="opt"><input type="radio" name="Q12" value="0"> 전혀 아니다</label>
-        <label class="opt"><input type="radio" name="Q12" value="1"> 아니다</label>
-        <label class="opt"><input type="radio" name="Q12" value="2"> 보통</label>
-        <label class="opt"><input type="radio" name="Q12" value="3"> 그렇다</label>
-        <label class="opt"><input type="radio" name="Q12" value="4"> 매우 그렇다</label>
+    <div class="q" data-key="D1" data-weight="1.0">
+      <div class="title">5) 같은 부위가 반복적으로 뻐근해지거나, 자세/컨디션에 따라 통증이 쉽게 재발합니다.</div>
+      <div class="opt">
+        <label><input type="radio" name="D1" value="0"> 전혀 아니다</label>
+        <label><input type="radio" name="D1" value="1"> 아니다</label>
+        <label><input type="radio" name="D1" value="2"> 보통</label>
+        <label><input type="radio" name="D1" value="3"> 그렇다</label>
+        <label><input type="radio" name="D1" value="4"> 매우 그렇다</label>
       </div>
     </div>
 
     <div class="row">
-      <button type="button" class="primary" id="calcBtn">BNI 결과 계산하기</button>
-      <button type="reset" id="resetBtn">초기화</button>
+      <button class="primary" id="btnCalc" type="button">BNI 결과 계산하기</button>
+      <button id="btnReset" type="button">초기화</button>
     </div>
-    <div id="err" class="err hidden">모든 문항에 응답해 주세요.</div>
 
-  </form>
-
-  <div id="resultWrap" class="card hidden">
-    <div class="badge">결과</div>
-    <div class="result">
-      <div class="big" id="resTitle">BNI 결과</div>
-      <div class="hr"></div>
-      <div id="resBody" class="mono"></div>
-      <div class="hr"></div>
-
-      <div style="font-weight:800;margin-bottom:6px">정밀 문진으로 이어서 분석하기</div>
-      <div class="hint" style="color:#b9c2da;margin:0 0 10px">
-        좀 더 정확한 분석을 원하신다면, 정밀문진(m2)을 시작해 보세요.
-      </div>
-      <button type="button" class="primary" id="goM2Btn">정밀 문진 시작하기</button>
+    <div class="tiny">
+      ※ 결과는 참고용입니다. 응급증상(흉통/호흡곤란/마비 등)은 즉시 의료기관에 문의하세요.
     </div>
   </div>
 
-  <!-- 계산중 오버레이 -->
+  <!-- ===== 결과 오버레이 ===== -->
   <div class="overlay" id="overlay">
-    <div class="overlay-box">
-      <div class="calc-row">
-        <div class="spinner"></div>
-        <div>
-          <div class="calc-title">분석중…</div>
-          <div class="calc-sub">입력하신 증상 패턴을 신경-기능 지수로 변환하고 있습니다.</div>
+    <div class="result-card">
+      <div class="res-title">BNI 결과(즉시)</div>
+
+      <!-- 계산중 -->
+      <div class="loader" id="loadingBox">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        <div>계산중…</div>
+      </div>
+
+      <!-- 결과 -->
+      <div class="res-block" id="resultBox">
+        <div class="line big" id="scoreLine"></div>
+        <div class="line" id="tierLine"></div>
+        <div class="line" id="codeLine"></div>
+
+        <div class="res-note" id="noteLine">
+          ※ 이 결과는 ‘진단’이 아니라, 신경-기능 패턴을 빠르게 요약한 지수입니다.
+        </div>
+
+        <div class="subcopy">
+          좀 더 정확한 분석을 원하신다면, 정밀 문진을 시작해보세요.
+        </div>
+
+        <div class="res-actions">
+          <button class="btn-next" id="btnGoM2" type="button">정밀 문진 시작하기</button>
+          <button class="btn-ghost" id="btnClose" type="button">닫기</button>
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    // ✅ m1 Apps Script URL (원장님이 준 URL)
-    const FORM_ENDPOINT_M1 = "https://script.google.com/macros/s/AKfycbzWPBIq7vJPL_9ADgmGGn-9ql9i3H25hk94QLnKtB-g9kgd10iNPx8JDEOQDIV8tAUy8g/exec";
+    // ✅ m1 저장용 Apps Script URL (사용자 제공)
+    const APPS_SCRIPT_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzWPBIq7vJPL_9ADgmGGn-9ql9i3H25hk94QLnKtB-g9kgd10iNPx8JDEOQDIV8tAUy8g/exec";
 
-    // ✅ m2 경로(같은 레포/폴더)
+    // ✅ m2 위치(같은 폴더 기준)
     const M2_URL = "m2.html";
 
     const overlay = document.getElementById("overlay");
-    const calcBtn = document.getElementById("calcBtn");
-    const goM2Btn = document.getElementById("goM2Btn");
-    const errBox = document.getElementById("err");
-    const resultWrap = document.getElementById("resultWrap");
-    const resTitle = document.getElementById("resTitle");
-    const resBody = document.getElementById("resBody");
+    const loadingBox = document.getElementById("loadingBox");
+    const resultBox = document.getElementById("resultBox");
 
-    let lastPayload = null;
+    const scoreLine = document.getElementById("scoreLine");
+    const tierLine  = document.getElementById("tierLine");
+    const codeLine  = document.getElementById("codeLine");
 
-    function showOverlay(on){
-      overlay.classList.toggle("on", !!on);
-    }
-    function showErr(msg){
-      errBox.textContent = msg || "모든 문항에 응답해 주세요.";
-      errBox.classList.remove("hidden");
-    }
-    function hideErr(){
-      errBox.classList.add("hidden");
+    const btnCalc = document.getElementById("btnCalc");
+    const btnReset = document.getElementById("btnReset");
+    const btnClose = document.getElementById("btnClose");
+    const btnGoM2 = document.getElementById("btnGoM2");
+
+    function getSelected(name){
+      const el = document.querySelector('input[name="'+name+'"]:checked');
+      return el ? Number(el.value) : null;
     }
 
-    function getAnswers(){
-      const qEls = document.querySelectorAll(".q");
-      const ans = {};
-      for(const q of qEls){
-        const qid = q.getAttribute("data-q");
-        const checked = document.querySelector(`input[name="${qid}"]:checked`);
-        if(!checked) return null;
-        ans[qid] = Number(checked.value);
+    // (예시) 점수 산출: 0~4 값을 합산 후 0~100 스케일로 변환
+    // 실제 문항 수 늘어나면 자동으로 분모가 바뀌게 설계
+    function computeScore(){
+      const keys = ["A1","A2","B1","C1","D1"];
+      let sum = 0;
+      let answered = 0;
+
+      keys.forEach(k=>{
+        const v = getSelected(k);
+        if(v !== null){
+          sum += v; answered += 1;
+        }
+      });
+
+      if(answered === 0){
+        return { ok:false, error:"no_answer" };
       }
-      return ans;
+
+      // max = answered*4
+      const max = answered * 4;
+      const score = Math.round((sum / max) * 100);
+
+      // 간단 분류
+      let tier = "GREEN";
+      if(score >= 75) tier = "RED";
+      else if(score >= 50) tier = "ORANGE";
+      else if(score >= 25) tier = "YELLOW";
+      else tier = "GREEN";
+
+      // 코드(예시): 답변 축 요약 (실제 규칙은 원장님 로직대로 바꾸면 됨)
+      // 여기선 각 축별(수면/소화/자율/근골격 등) 체크된 문항의 평균이 3 이상이면 태그 붙이는 형태
+      const tags = [];
+      if(getSelected("A1") !== null && getSelected("A1") >= 3) tags.push("SD");
+      if(getSelected("A2") !== null && getSelected("A2") >= 3) tags.push("SL");
+      if(getSelected("B1") !== null && getSelected("B1") >= 3) tags.push("DB");
+      if(getSelected("C1") !== null && getSelected("C1") >= 3) tags.push("AC");
+      if(getSelected("D1") !== null && getSelected("D1") >= 3) tags.push("MB");
+
+      const code = tags.length ? tags.join("-") : "BASE";
+
+      let label = "안정군(GREEN)";
+      if(tier === "RED") label = "상위 위험군(RED)";
+      else if(tier === "ORANGE") label = "고위험군(ORANGE)";
+      else if(tier === "YELLOW") label = "주의군(YELLOW)";
+
+      return {
+        ok:true,
+        total_score: score,
+        tier,
+        label,
+        bni_code: code,
+        raw: {
+          A1:getSelected("A1"),
+          A2:getSelected("A2"),
+          B1:getSelected("B1"),
+          C1:getSelected("C1"),
+          D1:getSelected("D1")
+        }
+      };
     }
 
-    function sumScore(ans){
-      // 0~4 * 12문항 = 0~48
-      let s = 0;
-      Object.keys(ans).forEach(k => s += (ans[k] || 0));
-      return s;
+    function tierColorClass(tier){
+      if(tier==="RED") return { c:"c-red", b:"b-red" };
+      if(tier==="ORANGE") return { c:"c-orange", b:"b-orange" };
+      if(tier==="YELLOW") return { c:"c-yellow", b:"b-yellow" };
+      return { c:"c-green", b:"b-green" };
     }
 
-    function to100(raw, maxRaw){
-      // 0~maxRaw -> 0~100
-      return Math.round((raw / maxRaw) * 100);
+    // ✅ Apps Script가 기대하는 방식: JSON 문자열(body) + JSON.parse()
+    async function saveToSheet(payload){
+      // payload에는 반드시 bni_code, total_score가 있어야 함
+      const body = JSON.stringify(payload);
+
+      // CORS 환경에 상관없이 Apps Script WebApp으로 POST 시도
+      // (응답을 못 읽어도 저장은 됨)
+      return fetch(APPS_SCRIPT_WEBAPP_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body
+      });
     }
 
-    function labelByScore(score100){
-      // 원장님 운영 기준에 맞춰 조정 가능
-      if(score100 >= 75) return "상위 위험군(RED)";
-      if(score100 >= 50) return "고위험군(ORANGE)";
-      if(score100 >= 25) return "주의군(YELLOW)";
-      return "안정군(GREEN)";
+    function openOverlayLoading(){
+      overlay.classList.add("show");
+      loadingBox.style.display = "flex";
+      resultBox.style.display = "none";
     }
 
-    function codeByAnswers(ans){
-      // 간단 코드: 상위 축(수면/소화/자율신경/통증) 강도 기반
-      // Q03(수면), Q04(소화), Q06/Q07/Q11(자율), Q09(통증/재발)
-      const sleep = ans.Q03;
-      const digest = ans.Q04;
-      const autoN = Math.round((ans.Q06 + ans.Q07 + ans.Q11)/3);
-      const msk = ans.Q09;
+    function showResultUI(res){
+      const cls = tierColorClass(res.tier);
 
-      // 0~4를 A~E로 매핑(시각적 코드)
-      const map = ["A","B","C","D","E"]; // A=0 ... E=4
-      return `S${map[sleep]}-D${map[digest]}-A${map[autoN]}-M${map[msk]}`;
+      scoreLine.innerHTML = `<span class="${cls.c}">[BNI 점수]</span> <span class="${cls.c}">${res.total_score}점</span>`;
+      tierLine.innerHTML  = `<span class="${cls.c}">[분류]</span> <span class="badge ${cls.b}">${res.label}</span>`;
+      codeLine.innerHTML  = `<span class="${cls.c}">[코드]</span> <span class="${cls.c}">${res.bni_code}</span>`;
+
+      loadingBox.style.display = "none";
+      resultBox.style.display = "block";
     }
 
-    // ✅ m1 응답을 시트로 전송(POST + GET 비콘 백업)
-    function sendM1ToSheet(payload){
-      // 1) POST
-      try{
-        const body = new URLSearchParams(payload).toString();
-        fetch(FORM_ENDPOINT_M1, {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
-          body
-        }).catch(()=>{});
-      }catch(e){}
-
-      // 2) GET 비콘(백업)
-      try{
-        const qs = new URLSearchParams(payload).toString();
-        const img = new Image();
-        img.src = FORM_ENDPOINT_M1 + "?" + qs;
-      }catch(e){}
+    function persistForM2(res){
+      // m2 자동분기용: querystring + localStorage 백업
+      const payload = {
+        score: res.total_score,
+        label: res.label,
+        code: res.bni_code,
+        tier: res.tier
+      };
+      try{ localStorage.setItem("BNI_PAYLOAD", JSON.stringify(payload)); }catch(e){}
+      return payload;
     }
 
-    function buildResultText(p){
-      // 검은 화면에 보여줄 텍스트(사용자용)
-      const lines = [];
-      lines.push(`[BNI 점수] ${p.score}점`);
-      lines.push(`[분류] ${p.label}`);
-      lines.push(`[코드] ${p.code}`);
-      lines.push("");
-      lines.push("※ 이 결과는 '진단'이 아니라,");
-      lines.push("  신경-기능 패턴을 빠르게 요약한 지수입니다.");
-      return lines.join("\n");
+    function buildM2Url(p){
+      const qs = new URLSearchParams();
+      qs.set("bni_score", String(p.score));
+      qs.set("bni_label", p.label);
+      qs.set("bni_code", p.code);
+      return M2_URL + "?" + qs.toString();
     }
 
-    function persistPayload(p){
-      try{
-        localStorage.setItem("BNI_PAYLOAD", JSON.stringify(p));
-      }catch(e){}
-    }
-
-    function buildM2Link(p){
-      const qs = new URLSearchParams({
-        bni_score: String(p.score),
-        bni_label: String(p.label),
-        bni_code:  String(p.code)
-      }).toString();
-      return M2_URL + "?" + qs;
-    }
-
-    calcBtn.addEventListener("click", function(){
-      hideErr();
-      const ans = getAnswers();
-      if(!ans){
-        showErr("모든 문항에 응답해 주세요.");
+    btnCalc.addEventListener("click", async ()=>{
+      const res = computeScore();
+      if(!res.ok){
+        alert("최소 1개 이상 선택해 주세요.");
         return;
       }
 
-      // “정밀해 보이는” 계산중 연출
-      showOverlay(true);
-      calcBtn.disabled = true;
+      btnCalc.disabled = true;
 
-      setTimeout(() => {
-        const raw = sumScore(ans);
-        const maxRaw = 48;
-        const score100 = to100(raw, maxRaw);
-        const label = labelByScore(score100);
-        const code = codeByAnswers(ans);
+      // 1) 계산중 화면 (정밀 처리처럼 보이게)
+      openOverlayLoading();
 
-        const payload = {
-          stage: "m1",
-          submitted_at: new Date().toISOString(),
-          bni_score: String(score100),
-          bni_label: String(label),
-          bni_code:  String(code),
-          // 필요하면 원시응답 저장(앱스크립트가 허용하면 시트에 같이 남습니다)
-          raw_answers: JSON.stringify(ans)
-        };
+      // 2) 시트 저장 payload 구성 (필수키 정확히!)
+      const now = new Date();
+      const clientTs = now.toISOString();
 
-        lastPayload = { score: score100, label, code };
+      const savePayload = {
+        timestamp_client: clientTs,
+        bni_code: res.bni_code,
+        total_score: res.total_score,
 
-        // 시트 저장
-        sendM1ToSheet(payload);
+        // 아래는 없어도 저장됨(선택)
+        sub_a: "", sub_b: "", sub_c: "", sub_d: "",
+        type_top1: "", type_top2: "",
+        A1: res.raw.A1, A2: res.raw.A2, A3:"", A4:"",
+        B1: res.raw.B1, B2:"", B3:"", B4:"",
+        C1: res.raw.C1, C2:"", C3:"", C4:"",
+        D1: res.raw.D1, D2:"", D3:"", D4:"",
+        utm_source: "", utm_medium: "", utm_campaign: "", utm_term: "", utm_content: "",
+        referrer: document.referrer || "",
+        page_url: location.href || "",
+        user_agent: navigator.userAgent || ""
+      };
 
-        // m2 자동분기용 저장
-        persistPayload(lastPayload);
-
-        // 결과 UI
-        resTitle.textContent = "BNI 결과(즉시)";
-        resBody.textContent = buildResultText(lastPayload);
-        resultWrap.classList.remove("hidden");
-
-        showOverlay(false);
-        calcBtn.disabled = false;
-
-        // 결과로 스크롤
-        resultWrap.scrollIntoView({behavior:"smooth", block:"start"});
-      }, 1200); // 1.2초 정도가 “계산중” 느낌에 가장 무난
-    });
-
-    goM2Btn.addEventListener("click", function(){
-      if(!lastPayload){
-        // 혹시 결과 없이 눌렀을 때
-        showErr("먼저 BNI 결과를 계산해 주세요.");
-        return;
+      // 3) 저장 시도 (실패해도 결과는 보여주되, 내부적으로는 콘솔에만 남김)
+      try{
+        await saveToSheet(savePayload);
+      }catch(e){
+        console.warn("BNI 저장 실패(네트워크/권한/CORS 가능):", e);
       }
-      const url = buildM2Link(lastPayload);
-      window.location.href = url;
+
+      // 4) “계산중…” 연출 후 결과 출력
+      setTimeout(()=>{
+        showResultUI(res);
+        const p = persistForM2(res);
+        btnGoM2.dataset.m2url = buildM2Url(p);
+        btnCalc.disabled = false;
+      }, 900);
     });
 
-    // 초기화 시 결과 숨김
-    document.getElementById("resetBtn").addEventListener("click", function(){
-      resultWrap.classList.add("hidden");
-      hideErr();
-      lastPayload = null;
-      try{ localStorage.removeItem("BNI_PAYLOAD"); }catch(e){}
+    btnGoM2.addEventListener("click", ()=>{
+      const url = btnGoM2.dataset.m2url || M2_URL;
+      location.href = url;
+    });
+
+    btnClose.addEventListener("click", ()=>{
+      overlay.classList.remove("show");
+    });
+
+    overlay.addEventListener("click", (e)=>{
+      if(e.target === overlay) overlay.classList.remove("show");
+    });
+
+    btnReset.addEventListener("click", ()=>{
+      const radios = document.querySelectorAll('input[type="radio"]');
+      radios.forEach(r=>r.checked=false);
+      alert("초기화했습니다.");
     });
   </script>
-
 </body>
 </html>
