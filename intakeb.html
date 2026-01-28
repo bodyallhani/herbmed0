@@ -2,141 +2,293 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
+  <title>바디올한의원 정밀진단 문진</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>P-code 정밀 문진 | 바디올 난치 신경-기능센터</title>
   <style>
-    /* 의학적 기품을 담은 화이트 테마 변수 */
+    /* 럭셔리 클리닉 디자인 시스템 */
     :root {
-      --bg: #fcfcfd;
+      --bg-color: #fcfcfd;
       --card-bg: #ffffff;
-      --text-main: #1e293b;
-      --text-sub: #64748b;
-      --accent: #2563eb; /* 신뢰감 있는 메디컬 블루 */
-      --accent-soft: #eff6ff;
-      --border: #e2e8f0;
+      --primary-color: #1e293b; /* 깊은 신뢰의 네이비 */
+      --accent-color: #2563eb;  /* 전문적인 메디컬 블루 */
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
       --input-bg: #f8fafc;
-      --radius: 16px;
-      --max: 720px;
+      --radius: 12px;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
     }
 
     * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
     
     body {
       margin: 0;
-      font-family: "Pretendard Variable", Pretendard, -apple-system, sans-serif;
+      font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      background-color: var(--bg-color);
       color: var(--text-main);
-      background-color: var(--bg);
       line-height: 1.6;
-      word-break: keep-all;
     }
 
-    .container { max-width: var(--max); margin: 0 auto; padding: 60px 24px; }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
 
-    /* 헤더 디자인 */
-    header { text-align: center; margin-bottom: 50px; }
-    .badge { 
-      display: inline-block; padding: 5px 14px; border-radius: 99px; 
-      background: var(--accent-soft); color: var(--accent); 
-      font-size: 12px; font-weight: 700; margin-bottom: 16px; 
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 40px;
+      letter-spacing: -1px;
+      color: var(--primary-color);
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-top: 60px;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+    }
+
+    /* 카드 스타일 레이아웃 */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 40px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+      margin-top: 16px;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: var(--accent-color);
+      margin-bottom: 16px;
+      text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    header h1 { font-size: 32px; font-weight: 800; color: #0f172a; margin: 0; letter-spacing: -1px; }
 
-    /* 카드 공통 스타일 */
-    .card {
-      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius);
-      padding: 40px; box-shadow: 0 4px 25px rgba(0, 0, 0, 0.03);
+    .intro-title {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 16px;
+      color: var(--text-main);
     }
 
-    /* 인트로 섹션 */
-    #intro { text-align: center; }
-    .intro-image { width: 100%; border-radius: 12px; margin: 24px 0; border: 1px solid var(--border); }
-    .intro-title { font-size: 20px; font-weight: 700; color: #334155; margin-bottom: 12px; }
-    .intro-list { 
-      text-align: left; padding: 0; list-style: none; margin: 32px 0; 
-      font-size: 15px; color: var(--text-sub); border-top: 1px solid var(--border); padding-top: 24px;
+    .hint {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
     }
-    .intro-list li { margin-bottom: 12px; display: flex; gap: 10px; align-items: flex-start; }
-    .intro-list li::before { content: "•"; color: var(--accent); font-weight: bold; }
 
-    /* 폼 요소 디자인 */
-    fieldset { border: none; padding: 0; margin: 0 0 50px 0; }
-    legend { 
-      font-size: 14px; font-weight: 800; color: var(--accent); 
-      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 24px; 
-      display: flex; align-items: center; width: 100%;
+    .hint strong {
+      color: var(--accent-color);
     }
-    legend::after { content: ""; flex: 1; height: 1px; background: var(--border); margin-left: 16px; }
 
-    .input-group { margin-bottom: 24px; }
-    label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: #475569; }
-    
-    input[type="text"], input[type="number"], textarea, select {
-      width: 100%; background: var(--input-bg); border: 1px solid var(--border);
-      border-radius: 10px; padding: 12px 16px; color: var(--text-main); font-size: 15px; transition: all 0.2s ease;
+    .intro-image {
+      margin-top: 24px;
+      border-radius: var(--radius);
+      width: 100%;
+      border: 1px solid var(--border-color);
     }
-    input:focus, textarea:focus { 
-      outline: none; border-color: var(--accent); background: #fff;
+
+    .intro-list {
+      list-style: none;
+      padding: 0;
+      margin: 30px 0;
+      font-size: 15px;
+    }
+
+    .intro-list li {
+      margin-bottom: 12px;
+      padding-left: 24px;
+      position: relative;
+      color: #475569;
+    }
+
+    .intro-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--accent-color);
+      font-weight: 900;
+    }
+
+    /* 폼 요소 스타일 */
+    fieldset {
+      margin-bottom: 40px;
+      padding: 30px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border-color);
+      background: #fff;
+      transition: border-color 0.2s;
+    }
+
+    fieldset:focus-within {
+      border-color: var(--accent-color);
+    }
+
+    legend {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--accent-color);
+      padding: 0 10px;
+      background: #fff;
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea,
+    select {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px 16px;
+      margin-top: 8px;
+      font-size: 15px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--input-bg);
+      transition: all 0.2s;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      background: #fff;
+      border-color: var(--accent-color);
       box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.05);
     }
-    textarea { min-height: 90px; resize: vertical; }
 
-    /* 선택지 버튼 (라디오 커스텀) */
-    .radio-group { display: flex; gap: 10px; margin-top: 8px; }
+    textarea { min-height: 100px; }
+
+    .radio-group {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
     .radio-group label {
-      flex: 1; background: #fff; border: 1px solid var(--border);
-      padding: 12px; text-align: center; border-radius: 10px; cursor: pointer; transition: 0.2s;
-      font-weight: 500; margin: 0; color: var(--text-sub);
-    }
-    .radio-group input { display: none; }
-    .radio-group label:has(input:checked) { 
-      background: var(--accent); border-color: var(--accent); color: #fff; 
-    }
-
-    /* 개인정보 동의함: 텍스트는 모두 보이되 작고 조화롭게 */
-    .consent-section { margin-top: 40px; }
-    .consent-box { 
-      background: #f1f5f9; border-radius: 12px; padding: 20px; 
-      font-size: 12.5px; color: #64748b; line-height: 1.6;
-    }
-    .consent-box p { margin: 0 0 10px 0; font-weight: 700; color: #475569; }
-    .consent-box ul { padding-left: 18px; margin: 0; }
-    .consent-box li { margin-bottom: 4px; }
-    .consent-check { 
-      display: flex; align-items: center; gap: 10px; margin-top: 16px; 
-      font-size: 14px; font-weight: 600; justify-content: center;
+      margin-top: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 14px;
+      transition: 0.2s;
     }
 
-    /* 버튼 시스템 */
-    .btn {
-      width: 100%; padding: 18px; border-radius: 12px; font-size: 16px; font-weight: 700;
-      cursor: pointer; transition: all 0.3s; border: none; margin-bottom: 12px;
+    .radio-group input[type="radio"] {
+      margin: 0;
     }
-    .btn.primary { background: #0f172a; color: #fff; }
-    .btn.primary:hover { background: #1e293b; transform: translateY(-2px); }
-    .btn.secondary { background: #fff; color: var(--text-sub); border: 1px solid var(--border); }
-    .btn.secondary:hover { background: #f8fafc; }
 
-    .start-btn { 
-      background: var(--accent); color: #fff; padding: 18px 48px; 
-      border-radius: 99px; border: none; font-weight: 700; cursor: pointer; 
-      font-size: 16px; transition: 0.3s; 
+    .radio-group label:hover {
+      background: #f1f5f9;
     }
-    .start-btn:hover { background: #1d4ed8; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(37,99,235,0.2); }
 
-    /* 하단 결과 영역 */
-    #output-section { margin-top: 60px; padding-top: 40px; border-top: 2px dashed var(--border); }
-    #output { 
-      width: 100%; height: 160px; background: #f8fafc; color: #475569; 
-      font-family: monospace; font-size: 12px; padding: 20px; 
-      border-radius: 12px; border: 1px solid var(--border); margin-bottom: 16px;
+    /* 동의 박스 */
+    .consent-box {
+      font-size: 13px;
+      background: #f8fafc;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      color: #475569;
+      line-height: 1.7;
+    }
+
+    .consent-box ul {
+      margin: 10px 0 0;
+      padding-left: 20px;
+    }
+
+    .consent-checkbox-wrapper {
+      margin-top: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+      justify-content: center;
+      padding: 10px;
+    }
+
+    /* 버튼 스타일 */
+    button {
+      padding: 14px 28px;
+      cursor: pointer;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 15px;
+      transition: all 0.2s;
+      border: 1px solid var(--border-color);
+      background: #fff;
+    }
+
+    button.primary {
+      background: var(--primary-color);
+      color: #fff;
+      border: none;
+      width: 100%;
+      margin-top: 20px;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(30, 41, 59, 0.15);
+    }
+
+    button.primary:hover {
+      background: #000;
+      transform: translateY(-1px);
+    }
+
+    button.start-btn {
+      width: 100%;
+      margin-top: 20px;
+      padding: 16px;
+      background: var(--accent-color);
+      color: #fff;
+      border: none;
+      font-size: 16px;
+    }
+
+    button.start-btn:hover {
+      background: #1d4ed8;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    }
+
+    #output {
+      width: 100%;
+      min-height: 200px;
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
+      padding: 15px;
+      font-family: 'Courier New', Courier, monospace;
+      color: #334155;
     }
 
     .hidden { display: none; }
-    
+
     @media (max-width: 600px) {
-      .container { padding: 40px 16px; }
-      .card { padding: 24px; }
+      .card { padding: 25px; }
+      fieldset { padding: 15px; }
       .radio-group { flex-direction: column; }
     }
   </style>
@@ -144,192 +296,276 @@
 <body>
 
   <div class="container">
-    <header>
-      <div class="badge">P-CODE DIAGNOSIS SYSTEM</div>
-      <h1>정밀 진단 문진</h1>
-    </header>
+    <h1>바디올한의원 P-code 문진</h1>
 
     <div id="intro" class="card">
-      <p class="intro-title">“개별화된 데이터 분석을 통해<br>최적의 치료 경로를 설계합니다.”</p>
-      <p style="font-size: 14px; color: var(--text-sub);">한의학적 변증과 기능적 지표를 결합한 바디올만의 정밀 문진 시스템입니다.</p>
+      <div class="badge">P-code 문진 · 대표원장 직접 분석</div>
+      <p class="intro-title">
+        “ 건강관리 • 질병진단 "<br>
+        " 한의학적으로 한번은 제대로 분석해보세요. ”
+      </p>
       
-      <img class="intro-image" src="https://raw.githubusercontent.com/bodyallhani/herbmed0/main/jinmak.jpg" alt="바디올 정밀 진단" />
+      <p class="hint">
+        <strong>★★필독★★</strong><br>    
+        <strong>[설문 완료]→[파란 버튼]→[자동 병원카톡 이동됨]<br>
+          ->[채팅창 길게 눌러 붙여넣기]→[카톡메시지 전송]<br>
+          →[간편진단예약 완료]</strong><br>
+        <br>
+        위 순서로 해주셔야, 예약누락이 없습니다.<br>
+        마지막에 실제 방법이 잘 나와있습니다.<br>
+        진단예약 누락되지않도록 해주세요 ^^
+      </p>
+
+      <img class="intro-image" src="https://raw.githubusercontent.com/bodyallhani/herbmed0/main/jinmak.jpg" alt="진맥 이미지" />
 
       <ul class="intro-list">
-        <li>작성된 문진은 대표원장이 직접 분석하여 진료에 반영합니다.</li>
-        <li>최종 완료 시 내용이 자동 복사되어 카카오톡으로 연결됩니다.</li>
-        <li>상세하게 적어주실수록 분석의 해상도가 높아집니다.</li>
+        <li>해당 페이지는 <strong>P-code 진단 효율을 위해 제작된 요약 프로그램</strong>입니다.</li>
+        <li><strong>한의사가 직접 해석</strong>해야 하는 문진표입니다.</li>
+        <li><strong>최종응답 버튼</strong>을 누르면 응답 내용이 <strong>자동복사</strong>되고 <strong>카카오채널</strong>로 이동합니다.</li>
       </ul>
 
-      <button type="button" class="start-btn" onclick="startSurvey()">정밀 문진 시작</button>
+      <button type="button" class="start-btn" onclick="startSurvey()">
+        정밀 문진 시작하기
+      </button>
     </div>
 
-    <div id="formContainer" class="hidden card">
+    <div id="formContainer" class="hidden">
+      <div class="card" style="margin-bottom:24px; border-left: 4px solid var(--accent-color);">
+        <p class="step-label" style="font-weight:700; margin:0;">1분 정밀 문진</p>
+        <p class="hint" style="margin-top:5px; margin-bottom:0;">잘 모르겠는 항목은 비워두셔도 됩니다. 자세히 쓸수록 진단이 명확해집니다.</p>
+      </div>
+
       <form id="intakeForm">
-        
         <fieldset>
-          <legend>Basic Information</legend>
-          <div class="input-group">
-            <label>바디올한의원 내원 경험</label>
-            <div class="radio-group">
-              <label><input type="radio" name="visitStatus" value="O" /> 있음</label>
-              <label><input type="radio" name="visitStatus" value="X" /> 없음</label>
-              <label><input type="radio" name="visitStatus" value="?" /> 잘 모름</label>
-            </div>
+          <legend>기본정보</legend>
+          <label><strong>바디올한의원에 현재 계시거나, 내원하신 적이 있으신가요?</strong></label>
+          <div class="radio-group">
+            <label><input type="radio" name="visitStatus" value="O" /> 네</label>
+            <label><input type="radio" name="visitStatus" value="X" /> 아니오</label>
+            <label><input type="radio" name="visitStatus" value="?" /> 잘 모름</label>
           </div>
-          <div class="input-group">
-            <label>성함 (또는 이니셜)</label>
-            <input type="text" id="name" placeholder="실명을 권장하나 익명도 가능합니다." />
-          </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-            <div class="input-group">
-              <label>나이</label>
-              <input type="number" id="age" placeholder="세" />
-            </div>
-            <div class="input-group">
-              <label>성별</label>
-              <select id="gender">
-                <option value="">선택</option>
-                <option value="남성">남성</option>
-                <option value="여성">여성</option>
-              </select>
-            </div>
-          </div>
-          <div class="input-group">
-            <label>직업 및 주요 생활 환경</label>
-            <textarea id="job" placeholder="업무 강도, 주로 취하는 자세, 교대 근무 여부 등"></textarea>
-          </div>
-          <div class="input-group">
-            <label>생활 습관 지표</label>
-            <input type="text" id="sleepHours" placeholder="평균 수면 시간" style="margin-bottom:8px">
-            <input type="text" id="caffeine" placeholder="카페인(커피) 섭취량" style="margin-bottom:8px">
-            <input type="text" id="alcohol" placeholder="음주 빈도" style="margin-bottom:8px">
-            <input type="text" id="exercise" placeholder="운동 종류 및 빈도">
-            <input type="hidden" id="workType" value="-">
-          </div>
+
+          <label><strong>이름:</strong>
+            <input type="text" id="name" placeholder="'익명' 가능. / 단, 실제 치료시에는 '실명'필요." />
+          </label>
+          <label><strong>나이:</strong>
+            <input type="number" id="age" min="1" max="120" />
+          </label>
+          <label><strong>성별:</strong>
+            <select id="gender">
+              <option value="">선택</option>
+              <option value="남성">남성</option>
+              <option value="여성">여성</option>
+              <option value="기타/응답하지 않음">기타/응답하지 않음</option>
+            </select>
+          </label>
+          <label>직업/생활패턴 (근무형태, 앉아있는 시간, 야근/교대 등):
+            <textarea id="job"></textarea>
+          </label>
+          <label>근무 형태:
+            <input type="text" id="workType" placeholder="예: 주간근무 / 교대근무 / 야간근무 등" />
+          </label>
+          <label>평균 수면 시간:
+            <input type="text" id="sleepHours" placeholder="예: 평일 6시간, 주말 8시간 등" />
+          </label>
+          <label>카페인 섭취:
+            <input type="text" id="caffeine" placeholder="예: 커피 하루 1~2잔, 에너지드링크 등" />
+          </label>
+          <label>음주 습관:
+            <input type="text" id="alcohol" placeholder="예: 거의 안 마심 / 주 1회 소량 / 주 3회 이상 등" />
+          </label>
+          <label>운동 여부:
+            <input type="text" id="exercise" placeholder="예: 안 함 / 주 2회 걷기 / 헬스 주 3회 등" />
+          </label>
         </fieldset>
 
         <fieldset>
-          <legend>Chief Complaints</legend>
-          <div class="input-group">
-            <label>불편한 증상 (중요도 순서)</label>
-            <input type="text" id="mainSymptom1" placeholder="1순위 증상" style="margin-bottom:8px">
-            <input type="text" id="mainSymptom2" placeholder="2순위 증상" style="margin-bottom:8px">
-            <input type="text" id="mainSymptom3" placeholder="기타 증상">
-          </div>
-          <div class="input-group">
-            <label>증상 발병 시기 및 계기</label>
-            <textarea id="onset" placeholder="언제부터, 어떤 상황(스트레스, 사고 등) 이후 시작되었나요?"></textarea>
-          </div>
+          <legend>주증상</legend>
+          <label>가장 불편한 증상 1:
+            <input type="text" id="mainSymptom1" placeholder="예: 어지럼, 두근거림, 수면장애 등" />
+          </label>
+          <label>불편한 증상 2:
+            <input type="text" id="mainSymptom2" />
+          </label>
+          <label>불편한 증상 3:
+            <input type="text" id="mainSymptom3" />
+          </label>
+          <label>증상은 언제부터 시작되었나요? (발병 시기, 계기):
+            <textarea id="onset" placeholder="예: 3개월 전 회사 스트레스 이후, 코로나 감염 이후 등"></textarea>
+          </label>
         </fieldset>
 
         <fieldset>
-          <legend>Clinical Pattern</legend>
-          <div class="input-group">
-            <label>증상이 가장 심화되는 조건</label>
-            <input type="text" id="worseTime" placeholder="특정 시간대, 날씨, 자세 등" />
-          </div>
-          <div class="input-group">
-            <label>트리거 및 완화 요인</label>
-            <textarea id="triggers" placeholder="무엇을 할 때 더 심해지나요?" style="margin-bottom:8px"></textarea>
-            <textarea id="relievers" placeholder="어떻게 하면 조금이라도 편안해지나요?"></textarea>
-            <input type="hidden" id="pattern" value="-">
-          </div>
+          <legend>증상양상</legend>
+          <label>하루 중 어느 시간대에 가장 심한가요?
+            <input type="text" id="worseTime" placeholder="예: 아침 기상 직후 / 오후 3~5시 / 밤 / 일정치 않음 등" />
+          </label>
+          <label>증상을 악화시키는 요인 (여러 개 가능):
+            <textarea id="triggers" placeholder="예: 스트레스, 누웠다 일어날 때, 샤워, 사람 많은 곳, 카페인, 운동 등"></textarea>
+          </label>
+          <label>증상을 완화시키는 요인:
+            <textarea id="relievers" placeholder="예: 누워있기, 깊은 호흡, 휴식, 약 복용 등"></textarea>
+          </label>
+          <label>증상 강도 변화 패턴:
+            <textarea id="pattern" placeholder="예: 좋을 때 나쁠 때가 번갈아 옴, 특정 날에만 심함 등"></textarea>
+          </label>
         </fieldset>
 
         <fieldset>
-          <legend>Vital Signs (0-10)</legend>
-          <p style="font-size:12px; color:var(--text-sub); margin-bottom:16px;">* 0점: 전혀 없음 / 10점: 극심함</p>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-            <div class="input-group"><label>만성 피로</label><input type="number" id="fatigue" min="0" max="10" /></div>
-            <div class="input-group"><label>어지럼/머리 멍함</label><input type="number" id="dizziness" min="0" max="10" /></div>
-            <div class="input-group"><label>가슴 두근거림</label><input type="number" id="palpitation" min="0" max="10" /></div>
-            <div class="input-group"><label>긴장/불안</label><input type="number" id="anxiety" min="0" max="10" /></div>
-            <div class="input-group"><label>기립 시 어지럼</label><input type="number" id="orthostatic" min="0" max="10" /></div>
-            <div class="input-group"><label>손발 감각이상</label><input type="number" id="numbness" min="0" max="10" /></div>
-          </div>
+          <legend>전신 증상 (0~10)</legend>
+          <p class="hint">0 = 전혀 없음, 10 = 가장 심함</p>
+          <label>피로감:
+            <input type="number" id="fatigue" min="0" max="10" />
+          </label>
+          <label>어지럼/띵함:
+            <input type="number" id="dizziness" min="0" max="10" />
+          </label>
+          <label>두근거림/심계:
+            <input type="number" id="palpitation" min="0" max="10" />
+          </label>
+          <label>불안/초조:
+            <input type="number" id="anxiety" min="0" max="10" />
+          </label>
+          <label>기립 시 불편감(누웠다 일어날 때 핑 도는 느낌 등):
+            <input type="number" id="orthostatic" min="0" max="10" />
+          </label>
+          <label>손발 저림/감각이상:
+            <input type="number" id="numbness" min="0" max="10" />
+          </label>
         </fieldset>
 
         <fieldset>
-          <legend>Functional Health</legend>
-          <div class="input-group">
-            <label>수면의 질</label>
-            <textarea id="sleepOnset" placeholder="입면 시간, 자다 깨는 횟수, 꿈의 빈도 등"></textarea>
-            <input type="hidden" id="sleepMiddle" value="-">
-            <input type="hidden" id="sleepQuality" value="0">
-            <input type="hidden" id="sleepMorning" value="-">
-          </div>
-          <div class="input-group">
-            <label>소화 및 대변</label>
-            <textarea id="bloating" placeholder="식후 더부룩함, 가스, 변의 형태 및 빈도 등"></textarea>
-            <input type="hidden" id="appetite" value="-">
-            <input type="hidden" id="postMeal" value="-">
-            <input type="hidden" id="nausea" value="-">
-            <input type="hidden" id="stool" value="-">
-          </div>
-          <div class="input-group">
-            <label>기타 자율신경 지표</label>
-            <textarea id="tempSensitivity" placeholder="온도 민감도(추위/더위), 한숨, 예민도 등"></textarea>
-            <input type="hidden" id="extremitiesTemp" value="-">
-            <input type="hidden" id="sweating" value="-">
-            <input type="hidden" id="breathing" value="-">
-            <input type="hidden" id="sensitivity" value="-">
-          </div>
+          <legend>수면</legend>
+          <label>잠들기까지 보통 어느 정도 걸리나요? (입면 문제):
+            <textarea id="sleepOnset" placeholder="예: 10~20분, 1시간 이상, 눕자마자 잠 등"></textarea>
+          </label>
+          <label>밤중에 자주 깨거나, 꿈이 많나요?
+            <textarea id="sleepMiddle" placeholder="예: 두세 번 깸, 악몽이 잦음, 거의 안 깸 등"></textarea>
+          </label>
+          <label>숙면감 (0~10):
+            <input type="number" id="sleepQuality" min="0" max="10" />
+          </label>
+          <label>아침에 일어났을 때 상태:
+            <textarea id="sleepMorning" placeholder="예: 개운하다 / 머리가 무겁다 / 몸이 납처럼 무겁다 등"></textarea>
+          </label>
         </fieldset>
 
         <fieldset>
-          <legend>Medical History</legend>
-          <div class="input-group">
-            <label>통증 및 골격계</label>
-            <textarea id="pain" placeholder="자주 아픈 부위 및 기존의 교정/치료 경험"></textarea>
-            <input type="hidden" id="morningStiffness" value="-">
-            <input type="hidden" id="reinjury" value="-">
-            <input type="hidden" id="manualTxHistory" value="-">
-            <input type="hidden" id="exercisePain" value="-">
-          </div>
-          <div class="input-group">
-            <label>복용 약물 및 진단명</label>
-            <textarea id="meds" placeholder="현재 복용 중인 양약, 건강기능식품 및 과거 수술력"></textarea>
-            <input type="hidden" id="diagnosis" value="-">
-            <input type="hidden" id="surgery" value="-">
-            <input type="hidden" id="familyHistory" value="-">
-          </div>
-          <div class="input-group">
-            <label>부인과 (해당 시 작성)</label>
-            <textarea id="gyne" placeholder="생리 주기 및 통증, 출산 관련 정보"></textarea>
-            <input type="hidden" id="gyne2" value="-">
-          </div>
+          <legend>소화기</legend>
+          <label>식욕 상태:
+            <input type="text" id="appetite" placeholder="예: 정상 / 감소 / 과식 경향 등" />
+          </label>
+          <label>식사 후 더부룩함:
+            <textarea id="bloating" placeholder="언제, 어떤 음식에서 더 심한지 등"></textarea>
+          </label>
+          <label>식후 졸림/멍함:
+            <textarea id="postMeal" placeholder="예: 식사 후 항상 졸리다, 특정 경우만 그렇다 등"></textarea>
+          </label>
+          <label>속쓰림/메스꺼움:
+            <textarea id="nausea"></textarea>
+          </label>
+          <label>대변 상태 (모양, 횟수, 설사/변비, 묽음/토막변 등):
+            <textarea id="stool"></textarea>
+          </label>
         </fieldset>
 
-        <div class="consent-section">
-          <legend>Privacy Consent</legend>
+        <fieldset>
+          <legend>자율신경 관련</legend>
+          <label>손발이 차갑거나 뜨거운 편인가요?
+            <textarea id="extremitiesTemp"></textarea>
+          </label>
+          <label>땀 (많이 남/거의 안 남/식은땀 등):
+            <textarea id="sweating"></textarea>
+          </label>
+          <label>온도/날씨 변화에 민감하신가요?
+            <textarea id="tempSensitivity"></textarea>
+          </label>
+          <label>호흡 패턴 (숨이 짧다, 한숨을 자주 쉰다, 가슴 답답하다 등):
+            <textarea id="breathing"></textarea>
+          </label>
+          <label>소리/조명/냄새 등에 예민한 편인가요?
+            <textarea id="sensitivity"></textarea>
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>부인과 (여성 전용)</legend>
+          <label>생리 주기/양/통증, 생리 전후 변화:
+            <textarea id="gyne"></textarea>
+          </label>
+          <label>임신/출산/유산 경험, 피임약 복용 여부:
+            <textarea id="gyne2"></textarea>
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>통증/근골격</legend>
+          <label>목/어깨/등/허리 통증 여부와 양상:
+            <textarea id="pain"></textarea>
+          </label>
+          <label>아침에 일어났을 때 뻣뻣함 여부:
+            <textarea id="morningStiffness"></textarea>
+          </label>
+          <label>같은 부위를 반복해서 삐끗하거나 다치는 편인가요?
+            <textarea id="reinjury"></textarea>
+          </label>
+          <label>기존 교정/도수/추나 치료 경험:
+            <textarea id="manualTxHistory"></textarea>
+          </label>
+          <label>운동 시 통증 패턴:
+            <textarea id="exercisePain"></textarea>
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>기존 진단/복용약/가족력</legend>
+          <label>지금까지 병원에서 들은 진단명:
+            <textarea id="diagnosis"></textarea>
+          </label>
+          <label>현재 복용 중인 약 (양약, 한약, 건강기능식품 포함):
+            <textarea id="meds"></textarea>
+          </label>
+          <label>수술/입원 경험:
+            <textarea id="surgery"></textarea>
+          </label>
+          <label>가족 중 유사 증상이나 만성질환(가족력):
+            <textarea id="familyHistory"></textarea>
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>기타</legend>
+          <label>특히 걱정되거나, 꼭 말씀하고 싶은 내용:
+            <textarea id="etc"></textarea>
+          </label>
+        </fieldset>
+
+        <fieldset style="background:#f1f5f9; border:none;">
+          <legend style="background:#f1f5f9;">개인정보 동의</legend>
           <div class="consent-box">
-            <p>개인정보 수집 및 이용 동의 안내</p>
-            바디올한의원은 아래의 목적을 위해 문진표에 기재된 내용을 수집 및 이용합니다.
+            <p style="margin:0 0 10px; font-weight:700;">개인정보 수집·이용 동의 안내</p>
             <ul>
-              <li>목적: 비대면 진료 상담, 예약 안내 및 최적의 치료 계획 수립</li>
-              <li>수집 항목: 인적 사항(이름, 나이, 성별, 직업) 및 증상 관련 건강 정보 일체</li>
-              <li>보유 및 이용 기간: 상담 종료 후 5년(관련 법령 준수)</li>
-              <li>동의 거부권: 동의를 거부할 수 있으나, 이 경우 상담 및 정밀 진단이 제한될 수 있습니다.</li>
+              <li>① 목적: 진료 상담 및 진료 여부 판단, 추후 치료 계획 수립</li>
+              <li>② 수집 항목: 상기 문진표에 작성한 내용 일체</li>
+              <li>③ 보유 기간: 상담 종료 후 최대 5년 (관련 법령에 따른 기간 내)</li>
             </ul>
           </div>
-          <div class="consent-check">
+          <div class="consent-checkbox-wrapper">
             <input type="checkbox" id="privacyConsent" />
-            <label for="privacyConsent">내용을 확인하였으며, 이에 동의합니다.</label>
+            <label for="privacyConsent" style="margin:0;"><strong>위 개인정보 수집·이용에 동의합니다.</strong></label>
           </div>
-        </div>
+        </fieldset>
 
-        <div style="margin-top: 50px;">
-          <button type="button" class="btn primary" id="allInOneBtn">분석 요청 및 제출</button>
-          <button type="reset" class="btn secondary">모든 내용 지우기</button>
-        </div>
+        <button type="button" class="primary start-btn" id="allInOneBtn">응답요약 및 복사하기</button>
+        <button type="reset" style="width:100%; border:none; color:var(--text-muted); background:none; font-size:13px; margin-top:10px;">입력 초기화</button>
       </form>
     </div>
 
-    <div id="output-section" class="hidden">
-      <header><h2>결과 요약 데이터</h2></header>
+    <div class="card" id="outputContainer" style="margin-top:40px;">
+      <h2>문진 텍스트 결과</h2>
+      <p class="hint">아래 내용은 자동으로 복사되었습니다. 카카오 채널 채팅창에 붙여넣어 주세요.</p>
       <textarea id="output" readonly></textarea>
-      <button type="button" class="btn secondary" onclick="copyOutput()">텍스트 다시 복사</button>
+      <button type="button" class="primary" style="margin-top:10px;" onclick="copyOutput()">텍스트 다시 복사하기</button>
     </div>
   </div>
 
@@ -342,20 +578,29 @@
     function getVisitStatus() {
       const radios = document.querySelectorAll('input[name="visitStatus"]');
       for (const r of radios) { if (r.checked) return r.value; }
-      return "미선택";
+      return "";
     }
 
     function formatKoreanDateTime(date) {
-      return date.getFullYear() + "." + (date.getMonth() + 1) + "." + date.getDate() + " " + date.getHours() + ":" + date.getMinutes();
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, "0");
+      const d = String(date.getDate()).padStart(2, "0");
+      const hh = String(date.getHours()).padStart(2, "0");
+      const mm = String(date.getMinutes()).padStart(2, "0");
+      const ss = String(date.getSeconds()).padStart(2, "0");
+      return y + "." + m + "." + d + " " + hh + ":" + mm + ":" + ss;
     }
 
     function collectFormData() {
       const ids = [
         "name","age","gender","job","workType","sleepHours","caffeine","alcohol","exercise",
-        "mainSymptom1","mainSymptom2","mainSymptom3","onset","worseTime","triggers","relievers","pattern",
+        "mainSymptom1","mainSymptom2","mainSymptom3","onset",
+        "worseTime","triggers","relievers","pattern",
         "fatigue","dizziness","palpitation","anxiety","orthostatic","numbness",
-        "sleepOnset","sleepMiddle","sleepQuality","sleepMorning","appetite","bloating","postMeal","nausea","stool",
-        "extremitiesTemp","sweating","tempSensitivity","breathing","sensitivity","gyne","gyne2",
+        "sleepOnset","sleepMiddle","sleepQuality","sleepMorning",
+        "appetite","bloating","postMeal","nausea","stool",
+        "extremitiesTemp","sweating","tempSensitivity","breathing","sensitivity",
+        "gyne","gyne2",
         "pain","morningStiffness","reinjury","manualTxHistory","exercisePain",
         "diagnosis","meds","surgery","familyHistory","etc"
       ];
@@ -365,22 +610,42 @@
       return data;
     }
 
-    function buildSummary(time) {
-      const data = collectFormData();
-      let s = `[바디올 P-code 정밀문진 / ${time}]\n\n`;
-      s += `■ 기본정보\n- 성함: ${data.name}\n- 나이/성별: ${data.age}/${data.gender}\n- 내원: ${data.visitStatus}\n- 직업패턴: ${data.job}\n\n`;
-      s += `■ 주증상\n- 1순위: ${data.mainSymptom1}\n- 2순위: ${data.mainSymptom2}\n- 발병계기: ${data.onset}\n\n`;
-      s += `■ 양상: ${data.worseTime}\n- 트리거: ${data.triggers}\n- 완화: ${data.relievers}\n\n`;
-      s += `■ 수치지표(0-10)\n- 피로:${data.fatigue} 어지럼:${data.dizziness} 두근거림:${data.palpitation} 불안:${data.anxiety} 기립:${data.orthostatic} 저림:${data.numbness}\n\n`;
-      s += `■ 상세기능\n- 수면: ${data.sleepOnset}\n- 소화: ${data.bloating}\n- 자율신경: ${data.tempSensitivity}\n\n`;
-      s += `■ 근골격/약물: ${data.pain}\n- 복용약: ${data.meds}\n\n`;
-      if(data.gyne) s += `■ 부인과: ${data.gyne}\n\n`;
-      s += `■ 기타사항: ${data.etc}`;
-      return s;
+    function sendToServer(data) {
+      const formBody = new URLSearchParams(data).toString();
+      fetch(FORM_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formBody
+      }).catch(err => console.error("Error:", err));
+    }
+
+    function buildSummary(consentTime) {
+      const l = [];
+      const vs = getVisitStatus();
+      l.push("[개인정보 동의: " + consentTime + "]\n");
+      l.push("[내원여부]: " + vs + "\n");
+      l.push("[기본정보]\n- 성함: " + v("name") + "\n- 나이/성별: " + v("age") + "/" + v("gender"));
+      l.push("- 생활패턴: " + v("job") + "\n- 근무/수면: " + v("workType") + "/" + v("sleepHours"));
+      l.push("- 카페인/음주/운동: " + v("caffeine") + "/" + v("alcohol") + "/" + v("exercise") + "\n");
+      l.push("[주증상]\n- " + v("mainSymptom1") + ", " + v("mainSymptom2") + ", " + v("mainSymptom3"));
+      l.push("- 시기/계기: " + v("onset") + "\n");
+      l.push("[양상/전신]\n- 시간대: " + v("worseTime") + "\n- 악화/완화: " + v("triggers") + " / " + v("relievers"));
+      l.push("- 피로/어지럼/두근/불안/기립/저림: " + v("fatigue") + "/" + v("dizziness") + "/" + v("palpitation") + "/" + v("anxiety") + "/" + v("orthostatic") + "/" + v("numbness") + "\n");
+      l.push("[수면/소화]\n- 입면/각성: " + v("sleepOnset") + "/" + v("sleepMiddle") + "\n- 숙면/기상상태: " + v("sleepQuality") + "/" + v("sleepMorning"));
+      l.push("- 식욕/더부룩: " + v("appetite") + "/" + v("bloating") + "\n- 졸림/메스껍/대변: " + v("postMeal") + "/" + v("nausea") + "/" + v("stool") + "\n");
+      l.push("[자율/통증]\n- 손발/땀/온도: " + v("extremitiesTemp") + "/" + v("sweating") + "/" + v("tempSensitivity"));
+      l.push("- 호흡/예민: " + v("breathing") + "/" + v("sensitivity"));
+      l.push("- 부인과: " + v("gyne") + " " + v("gyne2"));
+      l.push("- 통증부위: " + v("pain") + "\n- 아침뻣뻣/반복/경험: " + v("morningStiffness") + "/" + v("reinjury") + "/" + v("manualTxHistory") + "/" + v("exercisePain") + "\n");
+      l.push("[과거력/기타]\n- 진단명/약: " + v("diagnosis") + "/" + v("meds"));
+      l.push("- 수술/가족력: " + v("surgery") + "/" + v("familyHistory"));
+      l.push("- 기타: " + v("etc"));
+      return l.join("\n");
     }
 
     function copyText(text) {
       const temp = document.createElement("textarea");
+      temp.style.position = "fixed";
       temp.value = text;
       document.body.appendChild(temp);
       temp.select();
@@ -390,7 +655,7 @@
 
     function copyOutput() {
       copyText(document.getElementById("output").value);
-      alert("데이터가 복사되었습니다.");
+      alert("복사되었습니다. 카카오톡에 붙여넣어 주세요.");
     }
 
     function startSurvey() {
@@ -401,32 +666,20 @@
 
     document.getElementById("allInOneBtn").addEventListener("click", function () {
       if (!document.getElementById("privacyConsent").checked) {
-        alert("개인정보 수집 및 이용 동의가 필요합니다.");
+        alert("개인정보 수집·이용에 동의해 주세요.");
         return;
       }
-
-      const btn = this;
-      btn.disabled = true;
-      btn.textContent = "데이터를 전송하고 있습니다...";
-
-      const summaryText = buildSummary(formatKoreanDateTime(new Date()));
+      this.disabled = true;
+      this.textContent = "처리 중...";
+      const now = new Date();
+      const summaryText = buildSummary(formatKoreanDateTime(now));
       document.getElementById("output").value = summaryText;
-      document.getElementById("output-section").classList.remove("hidden");
       copyText(summaryText);
-
       const data = collectFormData();
       data.summary_text = summaryText;
-
-      fetch(FORM_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(data).toString()
-      }).finally(() => {
-        alert("문진 요약 데이터가 복사되었습니다.\n\n확인 버튼 클릭 후 연결되는 카카오톡 창에\n'붙여넣기'하여 메시지를 보내주세요.");
-        btn.disabled = false;
-        btn.textContent = "분석 요청 완료";
-        window.location.href = KAKAO_URL;
-      });
+      sendToServer(data);
+      alert("문진 요약이 복사되었습니다. 카카오톡 채팅창에 붙여넣어 주세요.");
+      window.location.href = KAKAO_URL;
     });
   </script>
 </body>
